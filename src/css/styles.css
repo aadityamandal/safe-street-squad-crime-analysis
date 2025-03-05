@@ -1,24 +1,42 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f7f7f7;
-    text-align: center;
+    background-color: #e0e4dc;
 }
 
 h1 {
     font-weight: 100;
     margin-top: 50px;
+    color: #637a62;
+}
+
+h1 sup {
+    font-size: 11px;
+    top: -18px;
+    font-weight: 400;
+    color: #5b835a;
 }
 
 h2 {
     font-weight: 300;
     font-size: 18px;
+    color: #91988B;
     margin-bottom: 40px;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 24px;
+    color: #333;
 }
 
 .container-fluid {
     padding-right: 30px;
     padding-left: 30px;
 }
+
+/****************/
+/*  LINE CHART  */
+/****************/
 
 .axis path,
 .axis line {
@@ -27,49 +45,16 @@ h2 {
     shape-rendering: crispEdges;
 }
 
-.browser text {
-    text-anchor: end;
+.axis text {
+    font-size: 11px;
 }
 
-.area {
-    opacity: 0.7;
-    clip-path: url(#clip);
+.line {
+    fill: none;
+    stroke: #86AC86;
+    stroke-width: 3px;
 }
 
-.area:hover {
-    opacity: 1;
-}
-
-.brush .extent {
-    stroke: #fff;
-    fill-opacity: .125;
-    shape-rendering: crispEdges;
-}
-
-/* Factoring out inline styles*/
-#main-container {
-    margin-top: 5vh;
-    border: thin solid grey;
-    border-radius: 5px;
-    background: rgba(221, 221, 221, 0.45);
-}
-
-#header-container,
-#brush-container {
-    height: 15vh;
-}
-
-#graph-container {
+.line-chart-container {
     height: 60vh;
-}
-
-.area-chart-container {
-    height: 30vh;
-
-}
-
-#stacked-area-chart,
-#timeline {
-    height: 100%;
-    width: 100%;
 }
