@@ -34,57 +34,41 @@ function initMainPage(allDataArray) {
 
 // Helper function to offload bulk processing
 function initRisingInsight1Chart(data) {
-  console.warn(data);
+  const timeRanges = ["Morning", "Afternoon", "Evening", "Night"];
+  const timeRangeCounts = {};
 
-  const timeRanges = ["Morning"];
-  console.log(data);
+  // Build time range object
+  data.forEach((d) => {
+    const year = +d.OCC_YEAR;
+    const timeRange = d.OCC_TIME_RANGE;
 
-  // Preprocess data: aggregate by Year and Neighborhood
-  const dataFilteredByTimeRange = data.filter((d) => d.OCC_TIME_RANGE === "Morning");
+    if (!timeRangeCounts[year]) {
+      timeRangeCounts[year] = {};
 
-  // Step 1: Initialize neighborhoodCounts object
-  let neighborhoodCounts = {};
-
-  // Step 2: List all unique neighborhoods (this will be used to initialize all neighborhoods for every year)
-  const allNeighborhoods = Array.from(new Set(dataFilteredByTimeRange.map((d) => d.NEIGHBOURHOOD_158)));
-
-  // Step 3: Loop through the filtered data and count occurrences per neighborhood per year
-  dataFilteredByTimeRange.forEach((d) => {
-    const year = d.OCC_YEAR;
-    const neighborhood = d.NEIGHBOURHOOD_158;
-
-    // Initialize the year if it doesn't exist
-    if (!neighborhoodCounts[year]) {
-      neighborhoodCounts[year] = {};
-
-      // Initialize all neighborhoods for the year with 0 counts
-      allNeighborhoods.forEach((neighborhood) => {
-        neighborhoodCounts[year][neighborhood] = 0;
+      timeRanges.forEach((timeRange) => {
+        timeRangeCounts[year][timeRange] = 0;
       });
     }
 
-    // Increment the count for the specific neighborhood in the given year
-    neighborhoodCounts[year][neighborhood]++;
+    timeRangeCounts[year][timeRange]++;
   });
 
-  // Step 4: Generate final data structure
-  let finalData = [];
+  const finalData = [];
 
-  // Loop through the years and create the final data structure
-  Object.keys(neighborhoodCounts).forEach((year) => {
-    let yearData = { OCC_YEAR: year };
+  Object.keys(timeRangeCounts).forEach((year) => {
+    const yearData = { year: +year };
+    const timeRangeCountForCurrentYear = timeRangeCounts[year];
 
-    // For each neighborhood, set the count for that year
-    allNeighborhoods.forEach((neighborhood) => {
-      yearData[neighborhood] = neighborhoodCounts[year][neighborhood]; // Count for this neighborhood in the year
+    timeRanges.forEach((timeRange) => {
+      yearData[timeRange] = timeRangeCountForCurrentYear[timeRange];
     });
 
     finalData.push(yearData);
   });
 
-  // Now, finalData will have the structure needed for stacking
   console.log(finalData);
 
   // Pass the processed data to the chart
-  risingInsight1Chart = new StackedAreaChart(`rising-insight-1-chart`, finalData);
+  //   risingInsight1Chart = new StackedAreaChart(`rising-insight-1-chart`, finalData);
+  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData);
 }
