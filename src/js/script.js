@@ -70,5 +70,6 @@ function initRisingInsight1Chart(data) {
 
   // Pass the processed data to the chart
   //   risingInsight1Chart = new StackedAreaChart(`rising-insight-1-chart`, finalData);
-  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData);
+  const colorScale = d3.scaleOrdinal().domain(["Morning", "Afternoon", "Evening", "Night"]).range(["#FFD700", "#FF8C00", "#FF4500", "#00008B"]);
+  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData, colorScale);
 }
