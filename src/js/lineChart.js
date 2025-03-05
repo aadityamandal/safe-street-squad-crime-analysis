@@ -1,10 +1,9 @@
 // Each subproblem is divided as illustrated in the following flow chart: https://cnobre.github.io/W25-CSC316H/week-06/lab/assets/cs171-week-06-vis-object.png?raw=true
-
 const TRANSITION_DURATION = 800;
 
-// Date parser
-let formatDate = d3.timeFormat("%Y");
-let parseDate = d3.timeParse("%Y");
+// // Date parser - For conveniently formatting the X-axis
+// let formatDate = d3.timeFormat("%Y"); // Convert date object to string representing the year
+// let parseDate = d3.timeParse("%Y"); // Converts the string representing the year back to a date object
 
 // !! Common to both line charts that we need from our storyboard, the maximum amount of colours needed is exactly 5.
 
@@ -43,6 +42,32 @@ class LineChart {
 
     vis.svg.append("g").attr("class", "y-axis axis");
 
+    // Initialize axes and labels
+    vis.x = d3.scaleTime().range([0, vis.width]); // We are using time-scale so the wrangle method will pre-process the years and convert them to date obj
+    vis.y = d3.scaleLinear().range([vis.height, 0]);
+    vis.xAxis = d3.axisBottom().scale(vis.x);
+
+    vis.yAxis = d3.axisLeft().scale(vis.y);
+    vis.xAxisGroup = vis.svg.append("g").attr("class", "x-axis axis").attr("transform", `translate(0, ${vis.height})`);
+    vis.yAxisGroup = vis.svg.append("g").attr("class", "y-axis axis");
+
+    // X-Axis Label
+    vis.svg
+      .append("text")
+      .attr("x", vis.width / 2)
+      .attr("y", vis.height + 40)
+      .attr("text-anchor", "middle")
+      .text("Years");
+
+    // Y-Axis Label
+    vis.svg
+      .append("text")
+      .attr("x", -vis.height / 2)
+      .attr("y", -30)
+      .attr("text-anchor", "middle")
+      .attr("transform", "rotate(-90)")
+      .text("Number of Incidents");
+
     // Initializer slider with our data range for years
     vis.slider = document.getElementById("slider");
 
@@ -79,38 +104,16 @@ class LineChart {
   wrangleData() {
     let vis = this;
 
-    // TODO: This probably has to be shifted - cuz we can't repeatedly wrangle the data. So probably shift it to init vis after commiting the draft.
-
-    vis.x = d3.scaleTime().range([0, vis.width]);
-    vis.y = d3.scaleLinear().range([vis.height, 0]);
-
-    vis.xAxis = d3.axisBottom().scale(vis.x);
-    vis.yAxis = d3.axisLeft().scale(vis.y);
-
-    vis.xAxisGroup = vis.svg.append("g").attr("class", "x-axis axis").attr("transform", `translate(0, ${vis.height})`);
-    vis.yAxisGroup = vis.svg.append("g").attr("class", "y-axis axis");
-
-    // X-Axis Label
-    vis.svg
-      .append("text")
-      .attr("x", vis.width / 2)
-      .attr("y", vis.height + 40)
-      .attr("text-anchor", "middle")
-      .text("Years");
-
-    // Y-Axis Label
-    vis.svg
-      .append("text")
-      .attr("x", -vis.height / 2)
-      .attr("y", -30)
-      .attr("text-anchor", "middle")
-      .attr("transform", "rotate(-90)")
-      .text("Number of Incidents");
-
     // We need to filter the data based on the slider bounds
     const sliderValues = slider.noUiSlider.get();
     const [minYear, maxYear] = sliderValues.map((v) => +v);
-    vis.displayData = vis.data.filter((d) => d.year >= minYear && d.year <= maxYear);
+    vis.displayData = vis.data
+      .filter((d) => d.year >= minYear && d.year <= maxYear)
+      .map((d) => {
+        // Convert the year integer to a Date object representing January 1st of that year
+        const dateObj = new Date(d.year, 0, 1);
+        return { ...d, year: dateObj };
+      });
     console.log(vis.displayData);
 
     vis.updateVis();
@@ -122,6 +125,9 @@ class LineChart {
   updateVis() {
     let vis = this;
 
+    // Update axis by calling the axis function
+    vis.x.domain(d3.extent(vis.displayData, (d) => d.year));
+    vis.y.domain([0, d3.max(vis.displayData, (d) => d["Night"])]);
     vis.svg.select(".x-axis").transition().duration(TRANSITION_DURATION).call(vis.xAxis);
     vis.svg.select(".y-axis").transition().duration(TRANSITION_DURATION).call(vis.yAxis);
 
