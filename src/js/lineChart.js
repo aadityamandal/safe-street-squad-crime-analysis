@@ -165,7 +165,14 @@ class LineChart {
 
     // Update axis by calling the axis function
     vis.x.domain(d3.extent(vis.displayData, (d) => d.year));
-    vis.y.domain([0, d3.max(vis.displayData, (d) => d["Night"])]);
+    vis.y.domain([
+      0,
+      // Which category has the highest count as of now? Filter and find out.
+      d3.max(vis.displayData, (d) => {
+        return d3.max(vis.categories, (category) => d[category]);
+      }),
+    ]);
+
     vis.svg.select(".x-axis").transition().duration(TRANSITION_DURATION).call(vis.xAxis);
     vis.svg.select(".y-axis").transition().duration(TRANSITION_DURATION).call(vis.yAxis);
 
