@@ -2,7 +2,7 @@
 const TRANSITION_DURATION = 800;
 
 // // Date parser - For conveniently formatting the X-axis
-// let formatDate = d3.timeFormat("%Y"); // Convert date object to string representing the year
+let formatDate = d3.timeFormat("%Y"); // Convert date object to string representing the year
 // let parseDate = d3.timeParse("%Y"); // Converts the string representing the year back to a date object
 
 // !! Common to both line charts that we need from our storyboard, the maximum amount of colours needed is exactly 5.
@@ -10,12 +10,12 @@ const TRANSITION_DURATION = 800;
 // TODO: To allow reusability (Like for Hook), we can make the expected data type [{year: ..., nonyear attributes}] and make it plot the non-year attributes
 // TODO: If the above is true then the constructor should have a parentElement for the filtering slider too, cuz we gotta insert that anyway for each visualization.
 class LineChart {
-  constructor(parentElement, data) {
+  constructor(parentElement, data, colorScale) {
     this.parentElement = parentElement;
     this.data = data;
     this.displayData = []; // Known as filtered data
     this.categories = Object.keys(this.data[0]).filter((key) => key !== "year");
-    this.colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(this.categories);
+    this.colorScale = colorScale;
 
     this.initVis();
   }
@@ -25,7 +25,7 @@ class LineChart {
    */
   initVis() {
     let vis = this;
-    vis.margin = { top: 40, right: 150, bottom: 80, left: 150 };
+    vis.margin = { top: 50, right: 150, bottom: 80, left: 150 };
     vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
     vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
@@ -48,7 +48,12 @@ class LineChart {
     // Initialize axes and labels
     vis.x = d3.scaleTime().range([0, vis.width]); // We are using time-scale so the wrangle method will pre-process the years and convert them to date obj
     vis.y = d3.scaleLinear().range([vis.height, 0]);
-    vis.xAxis = d3.axisBottom().scale(vis.x);
+    vis.xAxis = d3
+      .axisBottom()
+      .scale(vis.x)
+      .ticks(d3.timeYear) // Automatically show one tick per year
+      .tickFormat(d3.timeFormat("%Y")) // Format as year only
+      .tickSize(6); // Optionally, adjust the tick size if needed
 
     vis.yAxis = d3.axisLeft().scale(vis.y);
     vis.xAxisGroup = vis.svg.append("g").attr("class", "x-axis axis").attr("transform", `translate(0, ${vis.height})`);
@@ -164,43 +169,29 @@ class LineChart {
     vis.svg.select(".x-axis").transition().duration(TRANSITION_DURATION).call(vis.xAxis);
     vis.svg.select(".y-axis").transition().duration(TRANSITION_DURATION).call(vis.yAxis);
 
-    // Next we need to create a line generator and draw a path
-    const line = d3
-      .line()
-      .x((d) => vis.x(d.year))
-      .y((d) => vis.y(d["Night"]))
-      .curve(d3.curveLinear);
+    // Generate new data points for each category
+    this.categories.forEach((category) => {
+      // Next we need to create a line generator and draw a path
+      const line = d3
+        .line()
+        .x((d) => vis.x(d.year))
+        .y((d) => vis.y(d[category]))
+        .curve(d3.curveCatmullRom);
 
-    // Select the existing path and bind the data
-    // https://stackoverflow.com/questions/52028595/how-to-use-enter-data-join-for-d3-line-graphs
-    let path = vis.svg
-      .selectAll("path.line")
-      .data([vis.displayData])
-      .join(
-        (enter) => enter.append("path").attr("class", "line"),
-        (update) => update,
-        (exit) => exit.remove()
-      )
-      .attr("d", line); // and other attributes that change on enter/update here;
-
-    // Update the existing path
-    path.enter().append("path").attr("class", "line").merge(path).transition().duration(TRANSITION_DURATION).attr("d", line);
-
-    // Bind data to circle points use YEAR as key
-    // We also  animate the radius
-    let circles = this.svg.selectAll("circle").data(vis.displayData, (d) => d.year);
-    circles.exit().transition().duration(TRANSITION_DURATION).attr("r", 0).remove();
-    circles
-      .enter()
-      .append("circle")
-      .attr("r", 0)
-      .merge(circles)
-      .transition()
-      .duration(TRANSITION_DURATION)
-      .attr("cx", (d) => vis.x(d.year))
-      .attr("cy", (d) => vis.y(d["Night"]))
-      .attr("r", 5)
-      .attr("fill", "green")
-      .attr("stroke", "black");
+      // Select the existing path and bind the data
+      // https://stackoverflow.com/questions/52028595/how-to-use-enter-data-join-for-d3-line-graphs
+      let path = vis.svg
+        .selectAll(`path.line-${category}`)
+        .data([vis.displayData])
+        .join(
+          (enter) => enter.append("path").attr("class", `line-${category}`),
+          (update) => update,
+          (exit) => exit.remove()
+        )
+        .attr("stroke", this.colorScale(category))
+        .attr("fill", "none")
+        .attr("stroke-width", 2)
+        .attr("d", line); // and other attributes that change on enter/update here;
+    });
   }
 }
