@@ -14,6 +14,9 @@ class LineChart {
     this.parentElement = parentElement;
     this.data = data;
     this.displayData = []; // Known as filtered data
+    this.categories = Object.keys(this.data[0]).filter((key) => key !== "year");
+    this.colorScale = d3.scaleOrdinal(d3.schemeCategory10).domain(this.categories);
+
     this.initVis();
   }
 
@@ -67,6 +70,36 @@ class LineChart {
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
       .text("Number of Incidents");
+
+    // Legend
+    const legendWidth = 20;
+    const legendHeight = 20;
+
+    vis.legend = vis.svg
+      .append("g")
+      .attr("class", "legend")
+      .attr("transform", "translate(" + (vis.width + 20) + ", 0)"); // Position it on the right side of the chart
+
+    vis.legend
+      .selectAll("rect")
+      .data(vis.categories)
+      .enter()
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", (d, i) => i * (legendHeight + 5)) // Stacking vertically
+      .attr("width", legendWidth)
+      .attr("height", legendHeight)
+      .attr("fill", (d, i) => vis.colorScale(i)); // Use the colorScale to assign colors
+
+    vis.legend
+      .selectAll("text")
+      .data(vis.categories)
+      .enter()
+      .append("text")
+      .attr("x", legendWidth + 5) // Position text to the right of the square
+      .attr("y", (d, i) => i * (legendHeight + 5) + legendHeight / 2)
+      .attr("dy", ".35em")
+      .text((d) => d); // Use the category name as the label
 
     // Initializer slider with our data range for years
     vis.slider = document.getElementById("slider");
