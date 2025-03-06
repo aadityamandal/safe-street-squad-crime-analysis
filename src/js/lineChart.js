@@ -10,12 +10,13 @@ let formatDate = d3.timeFormat("%Y"); // Convert date object to string represent
 // TODO: To allow reusability (Like for Hook), we can make the expected data type [{year: ..., nonyear attributes}] and make it plot the non-year attributes
 // TODO: If the above is true then the constructor should have a parentElement for the filtering slider too, cuz we gotta insert that anyway for each visualization.
 class LineChart {
-  constructor(parentElement, data, colorScale) {
+  constructor(parentElement, data, colorScale, sliderID) {
     this.parentElement = parentElement;
     this.data = data;
     this.displayData = []; // Known as filtered data
     this.categories = Object.keys(this.data[0]).filter((key) => key !== "year");
     this.colorScale = colorScale;
+    this.sliderID = sliderID;
 
     this.initVis();
   }
@@ -70,7 +71,7 @@ class LineChart {
     // Y-Axis Label
     vis.svg
       .append("text")
-      .attr("x", -vis.height / 2)
+      .attr("x", -vis.height/ 2)
       .attr("y", -30)
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
@@ -107,12 +108,12 @@ class LineChart {
       .text((d) => d); // Use the category name as the label
 
     // Initializer slider with our data range for years
-    vis.slider = document.getElementById("slider");
+    vis.slider = document.getElementById(vis.sliderID);
 
     const yearExtent = d3.extent(vis.data, (d) => d.year);
     console.log(yearExtent);
 
-    noUiSlider.create(slider, {
+    noUiSlider.create(vis.slider, {
       start: [yearExtent[0], yearExtent[1]],
       connect: true,
       range: {
@@ -143,7 +144,7 @@ class LineChart {
     let vis = this;
 
     // We need to filter the data based on the slider bounds
-    const sliderValues = slider.noUiSlider.get();
+    const sliderValues = vis.slider.noUiSlider.get();
     const [minYear, maxYear] = sliderValues.map((v) => +v);
     vis.displayData = vis.data
       .filter((d) => d.year >= minYear && d.year <= maxYear)
