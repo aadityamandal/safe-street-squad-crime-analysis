@@ -49,12 +49,6 @@ h3 {
     font-size: 11px;
 }
 
-.line {
-    fill: none;
-    stroke: #86AC86;
-    stroke-width: 3px;
-}
-
 .line-chart-container {
     height: 60vh;
 }
