@@ -81,7 +81,7 @@ class PieChart {
             .attr("transform", d => `translate(${vis.arc.centroid(d)[0] * 1.5}, ${vis.arc.centroid(d)[1] * 1.5})`)
             .attr("text-anchor", "middle")
             .style("fill", "black")
-            .style("font-size", "10px")
+            .style("font-size", "12px")
             .text(d => `${d.data.category}: ${(d.data.value / total * 100).toFixed(1)}%`);
     }
     
