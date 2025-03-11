@@ -170,6 +170,8 @@ class LineChart {
       }),
     ]);
 
+    vis.y.range([this.height, 0]); // The range needs to map to our SVG height
+
     vis.svg.select(".x-axis").transition().duration(TRANSITION_DURATION).call(vis.xAxis);
     vis.svg.select(".y-axis").transition().duration(TRANSITION_DURATION).call(vis.yAxis);
 
@@ -200,7 +202,7 @@ class LineChart {
         .attr("d", line); // and other attributes that change on enter/update here;
 
       // Add or update circles at each data point
-      let cirlces = vis.svg
+      let circles = vis.svg
         .selectAll(`circle.dot-${category}`)
         .data(vis.displayData)
         .join(
@@ -217,7 +219,8 @@ class LineChart {
               .transition()
               .duration(TRANSITION_DURATION)
               .attr("r", 5)
-              .style("opacity", 1),
+              .style("opacity", 1)
+              .attr("stroke", "black"),
 
           // Update
           // New circles are going to "Grow" into the canvas.
@@ -232,16 +235,22 @@ class LineChart {
 
           // Exit
           // Circles are going to shrink to 0 before removal
-          (exit) =>
-            exit
-              .transition()
-              .duration(TRANSITION_DURATION)
-              .attr("cx", 0) // Move to the top-left corner
-              .attr("cy", 0) // Move to the top-left corner
-              .attr("r", 0) // Shrink to radius 0
-              .style("opacity", 0) // Fade out
-              .remove()
+          (exit) => exit.transition().duration(TRANSITION_DURATION).attr("cx", 0).attr("cy", 0).attr("r", 0).style("opacity", 0).remove()
         );
+
+      // Apply handlers separately
+      const originalColor = vis.colorScale(category);
+      circles
+        .on("mouseover", function () {
+          d3.select(this).attr("fill", "white");
+          d3.select(this).attr("stroke", originalColor);
+          d3.select(this).attr("r", 7);
+        })
+        .on("mouseout", function () {
+          d3.select(this).attr("r", 5);
+          d3.select(this).attr("stroke", "black");
+          d3.select(this).attr("fill", originalColor);
+        });
     });
   }
 }
