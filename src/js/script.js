@@ -9,7 +9,6 @@ let hookChart;
 function updateAllVisualizations() {
   risingInsight1Chart.wrangleData();
   hookChart.wrangleData();
-  
 }
 
 // load data using promises
@@ -57,7 +56,10 @@ function initHookChart(data) {
 
   console.log(aggregatedData);
 
-  const colorScale = d3.scaleOrdinal().domain(["ASSAULT", "ROBBERY", "THEFTOVER", "AUTOTHEFT", "BREAKENTER"]).range(["#3B9EF8", "#3BF848", "#FF4500", "#DFF213", "#EC1BEB"]);
+  const colorScale = d3
+    .scaleOrdinal()
+    .domain(["ASSAULT", "ROBBERY", "THEFTOVER", "AUTOTHEFT", "BREAKENTER"])
+    .range(["#3B9EF8", "#3BF848", "#FF4500", "#DFF213", "#EC1BEB"]);
   // Initialize the Hook chart
   hookChart = new LineChart("hook-chart", aggregatedData, colorScale, "slider-hook");
 }
@@ -101,9 +103,8 @@ function initRisingInsight1Chart(data) {
   // Pass the processed data to the chart
   //   risingInsight1Chart = new StackedAreaChart(`rising-insight-1-chart`, finalData);
   const colorScale = d3.scaleOrdinal().domain(["Morning", "Afternoon", "Evening", "Night"]).range(["#FFD700", "#FF8C00", "#FF4500", "#00008B"]);
-  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData, colorScale, "slider");
+  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData, colorScale, "slider", d3.curveLinear);
 }
-
 
 function initRisingInsight2Chart(data) {
   // Define urban and suburban neighborhoods
@@ -118,7 +119,7 @@ function initRisingInsight2Chart(data) {
     return isNaN(+value) || !value ? 0 : +value;
   }
 
-  data.forEach(d => {
+  data.forEach((d) => {
     if (urbanHoods.includes(d.NEIGHBOURHOOD_NAME)) {
       urbanCrimeData.Assault += safeParse(d.ASSAULT_2024);
       urbanCrimeData.Robbery += safeParse(d.ROBBERY_2024);
