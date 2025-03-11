@@ -1,22 +1,15 @@
 // Each subproblem is divided as illustrated in the following flow chart: https://cnobre.github.io/W25-CSC316H/week-06/lab/assets/cs171-week-06-vis-object.png?raw=true
 const TRANSITION_DURATION = 800;
-
-// // Date parser - For conveniently formatting the X-axis
 let formatDate = d3.timeFormat("%Y"); // Convert date object to string representing the year
-// let parseDate = d3.timeParse("%Y"); // Converts the string representing the year back to a date object
-
-// !! Common to both line charts that we need from our storyboard, the maximum amount of colours needed is exactly 5.
-
-// TODO: To allow reusability (Like for Hook), we can make the expected data type [{year: ..., nonyear attributes}] and make it plot the non-year attributes
-// TODO: If the above is true then the constructor should have a parentElement for the filtering slider too, cuz we gotta insert that anyway for each visualization.
 class LineChart {
-  constructor(parentElement, data, colorScale, sliderID) {
+  constructor(parentElement, data, colorScale, sliderID, curveType = d3.curveCatmullRom) {
     this.parentElement = parentElement;
     this.data = data;
     this.displayData = []; // Known as filtered data
     this.categories = Object.keys(this.data[0]).filter((key) => key !== "year");
     this.colorScale = colorScale;
     this.sliderID = sliderID;
+    this.curveType = curveType;
 
     this.initVis();
   }
@@ -26,6 +19,7 @@ class LineChart {
    */
   initVis() {
     let vis = this;
+
     vis.margin = { top: 50, right: 150, bottom: 80, left: 150 };
     vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
     vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
@@ -71,8 +65,8 @@ class LineChart {
     // Y-Axis Label
     vis.svg
       .append("text")
-      .attr("x", -vis.height/ 2)
-      .attr("y", -30)
+      .attr("x", -vis.height / 2)
+      .attr("y", -55)
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
       .text("Number of Incidents");
@@ -134,6 +128,8 @@ class LineChart {
       vis.wrangleData();
     });
 
+    vis.tooltip = d3.select("body").append("div").attr("class", "tooltip").attr("id", "LineChartTooltip");
+
     vis.wrangleData();
   }
 
@@ -184,7 +180,7 @@ class LineChart {
         .line()
         .x((d) => vis.x(d.year))
         .y((d) => vis.y(d[category]))
-        .curve(d3.curveCatmullRom);
+        .curve(vis.curveType);
 
       // Select the existing path and bind the data
       // https://stackoverflow.com/questions/52028595/how-to-use-enter-data-join-for-d3-line-graphs
@@ -199,7 +195,53 @@ class LineChart {
         .attr("stroke", this.colorScale(category))
         .attr("fill", "none")
         .attr("stroke-width", 2)
+        .transition()
+        .duration(TRANSITION_DURATION)
         .attr("d", line); // and other attributes that change on enter/update here;
+
+      // Add or update circles at each data point
+      let cirlces = vis.svg
+        .selectAll(`circle.dot-${category}`)
+        .data(vis.displayData)
+        .join(
+          // Enter - Create new circles and animate the radius from 0 to the desired value
+          (enter) =>
+            enter
+              .append("circle")
+              .attr("class", `dot-${category}`)
+              .attr("r", 0)
+              .attr("fill", this.colorScale(category))
+              .style("opacity", 0.8)
+              .attr("cx", (d) => vis.x(d.year))
+              .attr("cy", (d) => vis.y(d[category]))
+              .transition()
+              .duration(TRANSITION_DURATION)
+              .attr("r", 5)
+              .style("opacity", 1),
+
+          // Update
+          // New circles are going to "Grow" into the canvas.
+          (update) =>
+            update
+              .transition()
+              .duration(TRANSITION_DURATION)
+              .attr("cx", (d) => vis.x(d.year))
+              .attr("cy", (d) => vis.y(d[category]))
+              .attr("r", 5)
+              .style("opacity", 1),
+
+          // Exit
+          // Circles are going to shrink to 0 before removal
+          (exit) =>
+            exit
+              .transition()
+              .duration(TRANSITION_DURATION)
+              .attr("cx", 0) // Move to the top-left corner
+              .attr("cy", 0) // Move to the top-left corner
+              .attr("r", 0) // Shrink to radius 0
+              .style("opacity", 0) // Fade out
+              .remove()
+        );
     });
   }
 }
