@@ -61,7 +61,7 @@ function initHookChart(data) {
     .domain(["ASSAULT", "ROBBERY", "THEFTOVER", "AUTOTHEFT", "BREAKENTER"])
     .range(["#3B9EF8", "#3BF848", "#FF4500", "#DFF213", "#EC1BEB"]);
   // Initialize the Hook chart
-  hookChart = new LineChart("hook-chart", aggregatedData, colorScale, "slider-hook");
+  hookChart = new LineChart("hook-chart", aggregatedData, colorScale, "slider-hook", d3.curveCatmullRom, "category-filter-hook");
 }
 
 // Helper function to offload bulk processing
@@ -101,9 +101,8 @@ function initRisingInsight1Chart(data) {
   console.log(finalData);
 
   // Pass the processed data to the chart
-  //   risingInsight1Chart = new StackedAreaChart(`rising-insight-1-chart`, finalData);
   const colorScale = d3.scaleOrdinal().domain(["Morning", "Afternoon", "Evening", "Night"]).range(["#FFD700", "#FF8C00", "#FF4500", "#00008B"]);
-  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData, colorScale, "slider", d3.curveLinear);
+  risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData, colorScale, "slider", d3.curveLinear, "category-filter-timeOfDay");
 }
 
 function initRisingInsight2Chart(data) {
