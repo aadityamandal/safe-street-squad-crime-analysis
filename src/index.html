@@ -26,8 +26,49 @@
             <div class="col">
                 <div class="line-chart-container" id="hook-chart"></div>
             </div>
-            <div class="row-md-3 d-flex align-items-center">
-                <div id="slider-hook" style="width: 150px;"></div>
+            <div class="container py-3 d-flex justify-content-center align-items-center">
+                <div class="w-100">
+                    <!-- Date Range Section -->
+                    <div class="row mb-3 d-flex align-items-center justify-content-center gap-3">
+                        <div class="col-auto">
+                            <label><strong>Select Date Range:</strong></label><br>
+                        </div>
+                        <div class="col-auto">
+                            <div id="slider-hook" style="width: 200px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter Section -->
+                    <div class="row mb-3 d-flex align-items-center justify-content-center gap-3">
+                        <div id="category-filter-hook" class="category-filter-container col-auto">
+                            <label><strong>Hide Categories:</strong></label>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-assault" value="ASSAULT">
+                                <label class="form-check-label" for="line-assault">Assault</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-robbery" value="ROBBERY">
+                                <label class="form-check-label" for="line-robbery">Robbery</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-theftover" value="THEFTOVER">
+                                <label class="form-check-label" for="line-theftover">Theft Over</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-autotheft" value="AUTOTHEFT">
+                                <label class="form-check-label" for="line-autotheft">Auto Theft</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-breakenter" value="BREAKENTER">
+                                <label class="form-check-label" for="line-breakenter">Break &amp Enter</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -41,10 +82,50 @@
             <div class="col">
                 <div class="line-chart-container" id="rising-insight-1-chart"></div>
             </div>
-            <div class="row-md-3 d-flex align-items-center">
-                <div id="slider" style="width: 150px;"></div>
+            <div class="container py-3 d-flex justify-content-center align-items-center">
+                <div class="w-100">
+                    <!-- Date Range Section -->
+                    <div class="row mb-3 d-flex align-items-center justify-content-center gap-3">
+                        <div class="col-auto">
+                            <label><strong>Select Date Range:</strong></label><br>
+                        </div>
+                        <div class="col-auto">
+                            <div id="slider" style="width: 200px;"></div>
+                        </div>
+                    </div>
 
+                    <!-- Category Filter Section -->
+                    <div class="row mb-3 d-flex align-items-center justify-content-center gap-3">
+                        <div id="category-filter-timeOfDay" class="category-filter-container col-auto">
+                            <label><strong>Hide Categories:</strong></label>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-morning" value="Morning">
+                                <label class="form-check-label" for="line-morning">Morning</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-afternoon" value="Afternoon">
+                                <label class="form-check-label" for="line-afternoon">Afternoon</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-evening" value="Evening">
+                                <label class="form-check-label" for="line-evening">Evening</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="line-night" value="Night">
+                                <label class="form-check-label" for="line-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+
+
             <p class="mt-3 padding-top p-3 border rounded shadow-sm" style="background-color: #fffcbc;">
                 If so, should we
                 reconsider when it's safest to be out alone?</p>

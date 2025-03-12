@@ -2,7 +2,7 @@
 const TRANSITION_DURATION = 800;
 let formatDate = d3.timeFormat("%Y"); // Convert date object to string representing the year
 class LineChart {
-  constructor(parentElement, data, colorScale, sliderID, curveType = d3.curveCatmullRom) {
+  constructor(parentElement, data, colorScale, sliderID, curveType, excludeCategoriesParentElement) {
     this.parentElement = parentElement;
     this.data = data;
     this.displayData = []; // Known as filtered data
@@ -10,6 +10,7 @@ class LineChart {
     this.colorScale = colorScale;
     this.sliderID = sliderID;
     this.curveType = curveType;
+    this.excludeCategoriesParentElement = excludeCategoriesParentElement;
 
     this.initVis();
   }
@@ -130,6 +131,11 @@ class LineChart {
 
     vis.tooltip = d3.select("body").append("div").attr("class", "tooltip").attr("id", "LineChartTooltip");
 
+    //  We'll need to re-filter data when our checkbox selection changes.
+    document.getElementById(vis.excludeCategoriesParentElement).addEventListener("change", () => {
+      vis.wrangleData();
+    });
+
     vis.wrangleData();
   }
 
@@ -140,8 +146,18 @@ class LineChart {
     let vis = this;
 
     // We need to filter the data based on the slider bounds
+    // We also need to capture excluded categories from the checkbox group
     const sliderValues = vis.slider.noUiSlider.get();
     const [minYear, maxYear] = sliderValues.map((v) => +v);
+
+    vis.excludedCategoriesArray = Array.from(document.querySelectorAll(`#${vis.excludeCategoriesParentElement} input:checked`)).map(
+      (checkbox) => checkbox.value
+    );
+    console.warn("Categories that got excluded from the line chart were", vis.excludedCategoriesArray);
+
+    vis.excludedCategoriesSet = new Set(vis.excludedCategoriesArray);
+    vis.displayCategories = vis.categories.filter((category) => !vis.excludedCategoriesSet.has(category));
+
     vis.displayData = vis.data
       .filter((d) => d.year >= minYear && d.year <= maxYear)
       .map((d) => {
@@ -166,7 +182,7 @@ class LineChart {
       0,
       // Which category has the highest count as of now? Filter and find out.
       d3.max(vis.displayData, (d) => {
-        return d3.max(vis.categories, (category) => d[category]);
+        return d3.max(vis.displayCategories, (category) => d[category]);
       }),
     ]);
 
@@ -176,7 +192,9 @@ class LineChart {
     vis.svg.select(".y-axis").transition().duration(TRANSITION_DURATION).call(vis.yAxis);
 
     // Generate new data points for each category
-    this.categories.forEach((category) => {
+    console.warn("THE DISPLAY CATEGORIES ARE ", vis.displayCategories, vis.categories);
+
+    vis.displayCategories.forEach((category) => {
       // Next we need to create a line generator and draw a path
       const line = d3
         .line()
@@ -213,7 +231,7 @@ class LineChart {
               .attr("class", `dot-${category}`)
               .attr("r", 0)
               .attr("fill", this.colorScale(category))
-              .style("opacity", 0.8)
+              .style("opacity", 1)
               .attr("cx", (d) => vis.x(d.year))
               .attr("cy", (d) => vis.y(d[category]))
               .transition()
@@ -251,6 +269,12 @@ class LineChart {
           d3.select(this).attr("stroke", "black");
           d3.select(this).attr("fill", originalColor);
         });
+    });
+
+    // Remove lines and circles for checked categories with transitions
+    vis.excludedCategoriesArray.forEach((category) => {
+      vis.svg.selectAll(`path.line-${category}`).transition().duration(500).style("opacity", 0).remove();
+      vis.svg.selectAll(`circle.dot-${category}`).transition().duration(500).attr("r", 0).style("opacity", 0).remove();
     });
   }
 }
