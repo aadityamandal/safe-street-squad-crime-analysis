@@ -5,10 +5,12 @@
 // init global variables, switches, helper functions
 let risingInsight1Chart;
 let hookChart;
+let rs2Map;
 
 function updateAllVisualizations() {
   risingInsight1Chart.wrangleData();
   hookChart.wrangleData();
+  rs2Map.wrangleData();
 }
 
 // load data using promises
@@ -17,6 +19,8 @@ let promises = [
 
   // If you want to load another dataset just add a new entry here.
   d3.csv("data/Neighbourhood_Crime_Rates.csv"),
+  d3.csv("data/Major_Crime_Indicators.csv"),
+  d3.json("data/toronto_crs84.geojson"),
 ];
 
 Promise.all(promises)
@@ -30,12 +34,21 @@ Promise.all(promises)
 // This initializes the main page dynamically via DOM manipulation in D3.js
 function initMainPage(allDataArray) {
   // Add new entry here when you want to destructure other datasets in parallel.
-  const [shootingFireArmsData, neighbourhoodCrimeData] = allDataArray;
+  const [shootingFireArmsData, neighbourhoodCrimeData, majorCrimeData, torontoGeoData] = allDataArray;
   initRisingInsight1Chart(shootingFireArmsData);
   initRisingInsight2Chart(neighbourhoodCrimeData);
 
   //   risingInsight1Chart = new StackedAreaChart("rising-insight-1-chart");
   initHookChart(neighbourhoodCrimeData);
+
+  rs2Map = new RS2Map("rising-insight-2", torontoGeoData, majorCrimeData);
+
+  // Fix filter system.
+  // d3.selectAll(".form-check-input").on("change", function () {
+  //   const crime = this.value; -- probably have to fix this.
+  //   const isActive = this.checked;
+  //   rs2Map.updateActiveCrimes(crime, isActive);
+  // });
 }
 
 function initHookChart(data) {
