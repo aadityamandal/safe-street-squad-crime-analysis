@@ -58,3 +58,9 @@ h3 {
 .line-chart-container {
     height: 60vh;
 }
+
+.rising-insight-2 {
+    width: 100%;
+    height: 600px; /* Set a fixed height for debugging */
+    border: 1px solid red; /* Add a border to make the div visible */
+}
