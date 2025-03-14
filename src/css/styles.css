@@ -64,3 +64,27 @@ h3 {
     height: 600px; /* Set a fixed height for debugging */
     border: 1px solid red; /* Add a border to make the div visible */
 }
+
+
+
+/*----- SOLUTION SECTION--------*/
+
+.autocomplete-dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+    z-index: 1000;
+    font-size: 14px;
+}
+
+.autocomplete-dropdown div {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.autocomplete-dropdown div:hover {
+    background-color: #f0f0f0;
+}
