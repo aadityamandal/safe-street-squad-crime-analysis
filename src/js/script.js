@@ -43,12 +43,10 @@ function initMainPage(allDataArray) {
 
   rs2Map = new RS2Map("rising-insight-2", torontoGeoData, majorCrimeData);
 
-  // Fix filter system.
-  // d3.selectAll(".form-check-input").on("change", function () {
-  //   const crime = this.value; -- probably have to fix this.
-  //   const isActive = this.checked;
-  //   rs2Map.updateActiveCrimes(crime, isActive);
-  // });
+  document.querySelector(".form-select").addEventListener("change", function () {
+    let selectedCrime = this.value;
+    rs2Map.updateCrimeFilter(selectedCrime);
+  });
 }
 
 function initHookChart(data) {
@@ -69,10 +67,10 @@ function initHookChart(data) {
 
   console.log(aggregatedData);
 
-  const colorScale = d3
-    .scaleOrdinal()
+  const colorScale = d3.scaleOrdinal()
     .domain(["ASSAULT", "ROBBERY", "THEFTOVER", "AUTOTHEFT", "BREAKENTER"])
-    .range(["#3B9EF8", "#3BF848", "#FF4500", "#DFF213", "#EC1BEB"]);
+    .range(["#1f77b4", "#2ca02c", "#d62728", "#ff7f0e", "#9467bd"]);
+
   // Initialize the Hook chart
   hookChart = new LineChart("hook-chart", aggregatedData, colorScale, "slider-hook", d3.curveCatmullRom, "category-filter-hook");
 }
