@@ -40,7 +40,7 @@ class RS2Map {
             .fitSize([vis.width, vis.height], vis.geoData);
         vis.pathGenerator = d3.geoPath().projection(vis.projection);
 
-        // Draw the map of Toronto and its neighborhoods
+        // Draws the map of Toronto and its neighborhoods through the geoJSON data.
         vis.svg.selectAll(".neighborhood")
             .data(vis.geoData.features)
             .enter()
@@ -50,16 +50,10 @@ class RS2Map {
             .attr("fill", "#f0f0f0")
             .attr("stroke", "#ccc");
 
-        // Color scale
+        // Custom color scale for the map markers.
         vis.colorScale = d3.scaleOrdinal()
-            .domain(["Assault", "Robbery", "Auto Theft", "Theft Over", "Break and Enter"])
-            .range(["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd"]);
-
-        // Tooltip
-        // vis.tooltip = d3.select("body").append("div")
-        //     .attr("class", "tooltip")
-        //     .attr("id", "crimeTooltip")
-        //     .style("opacity", 0);
+            .domain(["Assault", "Robbery", "Theft Over", "Auto Theft", "Break and Enter"])
+            .range(["#1f77b4", "#2ca02c", "#d62728", "#ff7f0e", "#9467bd"]);
 
         // Call wrangleData to process data
         vis.wrangleData();
@@ -68,23 +62,23 @@ class RS2Map {
     wrangleData() {
         let vis = this;
 
-        // Filter crime data based on selections chosen on the filter.
+        // The visualizatin should show all active crimes at first. Otherwise, filter based on the selected category.
         vis.displayData = vis.crimeData.filter(d => vis.activeCrimes.has(d.MCI_CATEGORY));
 
-        console.log("Filtered crime data:", vis.displayData);
-
-        // Update the visualization
+        // Call updateVis to update the visualization
         vis.updateVis();
     }
 
     updateVis() {
         let vis = this;
 
-        // Bind data
         let circles = vis.svg.selectAll(".crime-circle")
             .data(vis.displayData, d => d.EVENT_UNIQUE_ID);
 
-        // Draw the circles onto the map.
+        // Removes existing circles on the map before updating.
+        circles.exit().remove();
+
+        // Draws new circles for the crime locations.
         circles.enter()
             .append("circle")
             .attr("class", "crime-circle")
@@ -92,31 +86,29 @@ class RS2Map {
             .attr("cy", d => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[1])
             .attr("r", 3)
             .attr("fill", d => vis.colorScale(d.MCI_CATEGORY));
-            // .on("mouseover", function (event, d) {
-            //     vis.tooltip.style("opacity", 1)
-            //         .html(`
-            //             <div style="border: thin solid grey; border-radius: 5px; background: lightgrey; padding: 10px">
-            //                 <h5>${d.MCI_CATEGORY}</h5>
-            //                 <p>Date: ${d.OCC_DATE}</p>
-            //                 <p>Location: ${d.PREMISES_TYPE}</p>
-            //             </div>
-            //         `)
-            //         .style("left", (event.pageX + 10) + "px")
-            //         .style("top", (event.pageY - 10) + "px");
-            // })
-            // .on("mouseout", function () {
-            //     vis.tooltip.style("opacity", 0);
-            // });
 
         // Updating circles
         circles.transition().duration(400)
             .attr("cx", d => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[0])
             .attr("cy", d => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[1])
             .attr("fill", d => vis.colorScale(d.MCI_CATEGORY));
-
-        // Removes unnecessary circles
-        circles.exit().remove();
     }
 
-    // Removed something here. I have it saved though.
+    // Function to update crime filter based on selection
+    updateCrimeFilter(selectedCrime) {
+        let vis = this;
+
+        // Removes all the circles markers before filtering
+        vis.svg.selectAll(".crime-circle").remove();
+
+        // Filters crime data based on the user's selection of crime category
+        if (selectedCrime === "All MCI Categories") {
+            vis.displayData = vis.crimeData;
+        } else {
+            vis.displayData = vis.crimeData.filter(d => d.MCI_CATEGORY === selectedCrime);
+        }
+
+        // Update the visualization with the new selection
+        vis.updateVis();
+    }
 }

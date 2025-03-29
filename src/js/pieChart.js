@@ -25,7 +25,7 @@ class PieChart {
         // Define color scale
         vis.color = d3.scaleOrdinal()
             .domain(["Assault", "Robbery", "Break & Enter", "Auto Theft", "Other"])
-            .range(["#e41a1c", "#377eb8", "#4daf4a", "#ff7f00", "#984ea3"]);
+            .range(["#1f77b4", "#2ca02c", "#9467bd", "#ff7f00", "#d62728"]);
 
         // Define pie layout
         vis.pie = d3.pie().value(d => d.value);
