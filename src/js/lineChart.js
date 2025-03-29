@@ -2,7 +2,7 @@
 const TRANSITION_DURATION = 800;
 let formatDate = d3.timeFormat("%Y"); // Convert date object to string representing the year
 class LineChart {
-  constructor(parentElement, data, colorScale, sliderID, curveType, excludeCategoriesParentElement) {
+  constructor(parentElement, data, colorScale, sliderID, curveType, includeCategoriesParentElement) {
     this.parentElement = parentElement;
     this.data = data;
     this.displayData = []; // Known as filtered data
@@ -10,7 +10,7 @@ class LineChart {
     this.colorScale = colorScale;
     this.sliderID = sliderID;
     this.curveType = curveType;
-    this.excludeCategoriesParentElement = excludeCategoriesParentElement;
+    this.includeCategoriesParentElement = includeCategoriesParentElement;
 
     this.initVis();
   }
@@ -132,7 +132,7 @@ class LineChart {
     vis.tooltip = d3.select("body").append("div").attr("class", "tooltip").attr("id", "LineChartTooltip");
 
     //  We'll need to re-filter data when our checkbox selection changes.
-    document.getElementById(vis.excludeCategoriesParentElement).addEventListener("change", () => {
+    document.getElementById(vis.includeCategoriesParentElement).addEventListener("change", () => {
       vis.wrangleData();
     });
 
@@ -150,13 +150,13 @@ class LineChart {
     const sliderValues = vis.slider.noUiSlider.get();
     const [minYear, maxYear] = sliderValues.map((v) => +v);
 
-    vis.excludedCategoriesArray = Array.from(document.querySelectorAll(`#${vis.excludeCategoriesParentElement} input:checked`)).map(
+    // Whatever is checked, just get the value of it.
+    vis.displayCategories = Array.from(document.querySelectorAll(`#${vis.includeCategoriesParentElement} input:checked`)).map((checkbox) => checkbox.value);
+    vis.excludedCategoriesArray = Array.from(document.querySelectorAll(`#${vis.includeCategoriesParentElement} input:not(:checked)`)).map(
       (checkbox) => checkbox.value
     );
-    console.warn("Categories that got excluded from the line chart were", vis.excludedCategoriesArray);
 
-    vis.excludedCategoriesSet = new Set(vis.excludedCategoriesArray);
-    vis.displayCategories = vis.categories.filter((category) => !vis.excludedCategoriesSet.has(category));
+    console.warn("Categories that got included in line chart are", vis.displayCategories);
 
     vis.displayData = vis.data
       .filter((d) => d.year >= minYear && d.year <= maxYear)
