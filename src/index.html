@@ -152,37 +152,18 @@
                     alt="Rising Insight #2 Visualization Sketch" class="img-fluid"
                     style="max-width: 80%; height: auto; border: 1px solid #ddd; padding: 10px; margin-top: 10px;"> -->
 
-                <div class="rising-insight-2" id="rising-insight-2"></div>
-
-                <!-- MCI Crime Category Filters (Checkboxes) -->
-                <div class="mt-3 text-center">
-                    <h5>Select Crime Categories:</h5>
-                    <div class="d-flex justify-content-center flex-wrap">
-                        <div class="form-check mx-2">
-                            <input class="form-check-input" type="checkbox" id="auto-theft">
-                            <label class="form-check-label" for="auto-theft">Auto Theft</label>
-                        </div>
-                        <div class="form-check mx-2">
-                            <input class="form-check-input" type="checkbox" id="assault">
-                            <label class="form-check-label" for="assault">Assault</label>
-                        </div>
-                        <div class="form-check mx-2">
-                            <input class="form-check-input" type="checkbox" id="robbery">
-                            <label class="form-check-label" for="robbery">Robbery</label>
-                        </div>
-                        <div class="form-check mx-2">
-                            <input class="form-check-input" type="checkbox" id="break-enter">
-                            <label class="form-check-label" for="break-enter">Break & Enter</label>
-                        </div>
-                        <div class="form-check mx-2">
-                            <input class="form-check-input" type="checkbox" id="theft-over">
-                            <label class="form-check-label" for="theft-over">Theft Over</label>
-                        </div>
-                        <!-- <div class="form-check mx-2">
-                            <input class="form-check-input" type="checkbox" id="shooting">
-                            <label class="form-check-label" for="shooting">Shooting</label>
-                        </div> -->
-                    </div>
+                <div class="row">
+                    <select class="form-select" id="rs2-form" aria-label="Default select example">
+                        <option value="All MCI Categories" selected>All MCI Categories</option>
+                        <option value="Assault">Assault</option>
+                        <option value="Robbery">Robbery</option>
+                        <option value="Break and Enter">Break and Enter</option>
+                        <option value="Theft Over">Theft Over</option>
+                        <option value="Auto Theft">Auto Theft</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <div class="rising-insight-2" id="rising-insight-2"></div>
                 </div>
 
                 <!-- Description of Planned Interactions -->
