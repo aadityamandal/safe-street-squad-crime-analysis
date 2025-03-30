@@ -202,35 +202,42 @@
         <!-- Message -->
         <div class="row my-5">
             <div class="col">
-                <!-- <h2>Message</h2> -->
                 <p class="d-inline-block p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
                     data-aos="zoom-out" data-aos-duration="1000">
                     Where you live also plays a huge role in crime exposure — let's break down how urban and suburban
                     areas differ in terms of crime type and frequency.
                 </p>
 
-                <!-- Moving the Pie Charts Here -->
-                <p>This visualization compares the crime distribution between urban and suburban areas in Toronto.</p>
-                <div class="row">
-                    <div class="col-md-6">
-                        <h3>Urban Crime Distribution</h3>
-                        <div id="urban-pie-chart"></div>
+                <p class="text-center mt-3">
+                    This visualization compares the crime distribution between urban and suburban areas in Toronto.
+                </p>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-5 text-center mb-4">
+                      <h3>Urban Crime Distribution</h3>
+                      <div id="urban-pie-chart"></div>
                     </div>
-                    <div class="col-md-6">
-                        <h3>Suburban Crime Distribution</h3>
-                        <div id="suburban-pie-chart"></div>
+                    <div class="col-md-5 text-center mb-4">
+                      <h3>Suburban Crime Distribution</h3>
+                      <div id="suburban-pie-chart"></div>
                     </div>
-                </div>
+                  </div>
+                  
             </div>
         </div>
+
 
 
         <!-- Solution Section -->
         <div class="row my-5">
             <div class="col">
                 <h2>Solution: Walking Safety Checker</h2>
-                <p class="text-muted">Find out how safe your walking route is based on historical crime data in Toronto.
-                </p>
+                <p class="text-muted">
+                    This interactive tool helps Toronto residents visualize how safe their walking routes are based on historical crime data.
+                    <br>
+                    By highlighting crime density along specific walking paths, this tool raises awareness about day-to-day exposure to urban crime
+                    and helps promote safer route decisions and preventative planning.
+                  </p>
 
                 <!-- Input Fields for Source and Destination -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -248,8 +255,13 @@
                 </div>
 
                 <!-- Safety Check Button -->
-                <button class="btn btn-primary w-100 fw-bold mb-3" onclick="calculateRouteSafety()">🔎 Check How Safe I
+                <button class="btn btn-primary w-100 fw-bold mb-3" id="safety-check-btn">🔎 Check How Safe I
                     Will Be</button>
+
+                <!-- Loading Indicator -->
+                <div id="loading-indicator" class="text-center fw-semibold text-muted mb-2" style="display: none;">
+                    Calculating safety score... Please wait.
+                </div>
 
                 <!-- Placeholder for Output Score -->
                 <h3 id="safety-score" class="text-center mt-4">Crimes Reported Near Route: -</h3>
@@ -283,17 +295,17 @@
                     </button>
                     <div id="instructionsCollapse" class="collapse mt-2">
                         <div class="border p-3 rounded bg-light">
-                            <p>This tool helps you check <b>how safe</b> your walking route is based on historical crime
-                                data.</p>
-                            <p><b>Steps to Use:</b></p>
-                            <ul>
-                                <li>Enter your <b>starting location</b> and <b>destination</b>.</li>
-                                <li>Click <b>"Check How Safe I Will Be"</b> to analyze the safety of your walk.</li>
-                                <li>The <b>map will update</b>, displaying safety zones and crime risk areas.</li>
-                                <li>The tool will provide a <b>safety index score</b> (higher = safer).</li>
-                            </ul>
+                          <p>This tool helps you check <b>how safe</b> your walking route is based on historical crime data.</p>
+                          <p><b>Steps to Use:</b></p>
+                          <ul class="text-start ps-3">
+                            <li>Enter your <b>starting location</b> and <b>destination</b>.</li>
+                            <li>Click <b>"Check How Safe I Will Be"</b> to analyze the safety of your walk.</li>
+                            <li>The <b>map will update</b>, displaying safety zones and crime risk areas.</li>
+                            <li>The tool will provide a <b>safety index score</b> (higher = safer).</li>
+                          </ul>
                         </div>
-                    </div>
+                      </div>
+                      
                 </div>
 
 
@@ -305,35 +317,37 @@
                     </button>
                     <div id="calculationCollapse" class="collapse mt-2">
                         <div class="border p-3 rounded bg-light">
-                            <p><b>The Safety Index is calculated based on:</b></p>
-                            <ul>
-                                <li><b>Crime Rate:</b> Number of reported crimes along your route.</li>
-                                <li><b>Location Density:</b> More populated areas tend to be safer.</li>
-                                <li><b>Severity of Crimes:</b> Violent crimes reduce the score more.</li>
-                                <li><b>Distance Factor:</b> Longer walks **lower** the safety score.</li>
-                                <li><b>Crime Recency:</b> Recent incidents impact the score more.</li>
-                            </ul>
-                            <p><b>Score Interpretation:</b></p>
-                            <ul>
-                                <li>**7 - 10** → <b>Safe to walk</b></li>
-                                <li>**4 - 6.9** → <b>Walk with caution</b></li>
-                                <li>**2 - 3.9** → <b>Better to use a car</b></li>
-                                <li>**Below 2** → <b>Extremely unsafe</b></li>
-                            </ul>
+                          <p><b>The Safety Index is calculated based on:</b></p>
+                          <ul class="text-start ps-3">
+                            <li><b>Crime Rate:</b> Number of reported crimes along your route.</li>
+                            <li><b>Location Density:</b> More populated areas tend to be safer.</li>
+                            <li><b>Severity of Crimes:</b> Violent crimes reduce the score more.</li>
+                            <li><b>Distance Factor:</b> Longer walks <b>lower</b> the safety score.</li>
+                            <li><b>Crime Recency:</b> Recent incidents impact the score more.</li>
+                          </ul>
+                          <p><b>Score Interpretation:</b></p>
+                          <ul class="text-start ps-3">
+                            <li><b>7 - 10</b> → <b>Safe to walk</b></li>
+                            <li><b>4 - 6.9</b> → <b>Walk with caution</b></li>
+                            <li><b>2 - 3.9</b> → <b>Better to use a car</b></li>
+                            <li><b>Below 2</b> → <b>Extremely unsafe</b></li>
+                          </ul>
                         </div>
-                    </div>
+                      </div>
+                      
                     <!-- Example Use Case (Always Visible) -->
                     <div class="mt-4 border p-3 rounded bg-light">
                         <p><b>Scenario:</b></p>
                         <p>A user enters '<b>Union Station</b>' as their starting point and '<b>Bahen Centre for
-                                Information Technology</b>' as their destination.</p>
+                            Information Technology</b>' as their destination.</p>
                         <p>The system calculates a <b>Safety Score of 3.0</b>, meaning:</p>
-                        <ul>
-                            <li>There have been multiple <b>reported crimes along this route</b>.</li>
-                            <li>It's **not the safest path**—walking with caution is advised.</li>
-                            <li>Alternative **transport options** like TTC or Uber might be preferable.</li>
+                        <ul class="text-start ps-3">
+                          <li>There have been multiple <b>reported crimes along this route</b>.</li>
+                          <li>It's <b>not the safest path</b>—walking with caution is advised.</li>
+                          <li>Alternative <b>transport options</b> like TTC or Uber might be preferable.</li>
                         </ul>
-                    </div>
+                      </div>
+                      
 
                 </div>
 
@@ -388,6 +402,7 @@
     <script src="js/lineChart.js"></script>
     <script src="js/pieChart.js"></script>
     <script src="js/rs2Map.js"></script>
+    <script src="js/map.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
