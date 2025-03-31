@@ -124,40 +124,37 @@ function initRisingInsight1Chart(data) {
 }
 
 function initRisingInsight2Chart(data) {
-  // Define urban and suburban neighborhoods
-  const urbanHoods = ["Downtown", "Yonge-Bay Corridor", "Bay-Cloverhill", "East Willowdale"];
-  const suburbanHoods = ["Scarborough Village", "Rexdale-Kipling", "Jane-Finch", "Willowdale West"];
+  // Manually define a set of known urban neighborhoods
+  const urbanHoods = new Set([
+    "Downtown", "Yonge-Bay Corridor", "Bay-Cloverhill", "Church-Wellesley", "St Lawrence-East Bayfront-The Islands",
+    "Harbourfront-CityPlace", "Wellington Place", "Fort York-Liberty Village", "West Queen West", "Annex", "University",
+    "Palmerston-Little Italy", "Kensington-Chinatown", "Moss Park", "Regent Park", "North St.James Town",
+    "Cabbagetown-South St.James Town", "Yonge-Eglinton", "Mount Pleasant East", "Rosedale-Moore Park", "Yonge-St.Clair"
+  ]);
 
   let urbanCrimeData = { Assault: 0, Robbery: 0, "Break & Enter": 0, "Auto Theft": 0, Other: 0 };
   let suburbanCrimeData = { Assault: 0, Robbery: 0, "Break & Enter": 0, "Auto Theft": 0, Other: 0 };
 
-  // Convert missing or NaN values to 0 before summing
   function safeParse(value) {
     return isNaN(+value) || !value ? 0 : +value;
   }
 
   data.forEach((d) => {
-    if (urbanHoods.includes(d.NEIGHBOURHOOD_NAME)) {
-      urbanCrimeData.Assault += safeParse(d.ASSAULT_2024);
-      urbanCrimeData.Robbery += safeParse(d.ROBBERY_2024);
-      urbanCrimeData["Break & Enter"] += safeParse(d.BREAKENTER_2024);
-      urbanCrimeData["Auto Theft"] += safeParse(d.AUTOTHEFT_2024);
-      urbanCrimeData.Other += safeParse(d.THEFTOVER_2024) + safeParse(d.SHOOTING_2024);
-    }
-    if (suburbanHoods.includes(d.NEIGHBOURHOOD_NAME)) {
-      suburbanCrimeData.Assault += safeParse(d.ASSAULT_2024);
-      suburbanCrimeData.Robbery += safeParse(d.ROBBERY_2024);
-      suburbanCrimeData["Break & Enter"] += safeParse(d.BREAKENTER_2024);
-      suburbanCrimeData["Auto Theft"] += safeParse(d.AUTOTHEFT_2024);
-      suburbanCrimeData.Other += safeParse(d.THEFTOVER_2024) + safeParse(d.SHOOTING_2024);
-    }
+    const hoodName = d.NEIGHBOURHOOD_NAME;
+
+    const target = urbanHoods.has(hoodName) ? urbanCrimeData : suburbanCrimeData;
+
+    target.Assault += safeParse(d.ASSAULT_2024);
+    target.Robbery += safeParse(d.ROBBERY_2024);
+    target["Break & Enter"] += safeParse(d.BREAKENTER_2024);
+    target["Auto Theft"] += safeParse(d.AUTOTHEFT_2024);
+    target.Other += safeParse(d.THEFTOVER_2024) + safeParse(d.SHOOTING_2024);
   });
 
-  // Ensure no zero-data issues
   console.log("Urban Crime Data:", urbanCrimeData);
   console.log("Suburban Crime Data:", suburbanCrimeData);
 
-  // Initialize the Pie Charts
   new PieChart("urban-pie-chart", urbanCrimeData);
   new PieChart("suburban-pie-chart", suburbanCrimeData);
 }
+
