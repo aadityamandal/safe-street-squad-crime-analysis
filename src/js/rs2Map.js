@@ -8,55 +8,56 @@ class RS2Map {
         this.geoData = geoData;
         this.crimeData = crimeData;
         this.displayData = [];
-        this.activeCrimes = new Set(["Assault", "Robbery", "Auto Theft", "Theft Over", "Break and Enter"]);
+        this.activeCrimes = new Set(["Assault"]);
+
+        // this.activeCrimes = new Set(["Assault", "Robbery", "Auto Theft", "Theft Over", "Break and Enter"]);
 
         this.initVis();
     }
 
     initVis() {
         let vis = this;
-
+    
         vis.margin = { top: 20, right: 20, bottom: 20, left: 20 };
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
-
-        // Main SVG container
+    
         vis.svg = d3.select(`#${vis.parentElement}`).append("svg")
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .attr("height", vis.height + vis.margin.top + vis.margin.bottom);
-
-        // Add zoom behavior
-        vis.zoom = d3.zoom()
-            .scaleExtent([1, 10])
-            .on("zoom", (event) => {
-                vis.zoomGroup.attr("transform", event.transform);
-
-                // Make crime circles smaller when zooming in
-                vis.zoomGroup.selectAll(".crime-circle")
-                    .attr("r", 3 / event.transform.k); // scale down radius by zoom level
-            });
-
-
-        vis.svg.call(vis.zoom);
-
-        // Group that will be zoomed
-        vis.zoomGroup = vis.svg.append("g")
+    
+            vis.zoomGroup = vis.svg.append("g")
             .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
-
-        // Add title (keep it fixed, not zoomable)
+        
+        // Add explicit sub-layers for rendering order
+        vis.neighborhoodLayer = vis.zoomGroup.append("g").attr("class", "neighborhood-layer");
+        vis.streetLayer = vis.zoomGroup.append("g").attr("class", "street-layer");
+        vis.pointsLayer = vis.zoomGroup.append("g").attr("class", "points-layer"); // crime circles on top
+        
+    
         vis.svg.append("text")
             .attr("class", "map-title")
             .attr("x", vis.width / 2)
             .attr("y", 20)
             .attr("text-anchor", "middle")
             .text("Toronto Crime Map by MCI Category");
-
-        // Projection and path generator
+    
         vis.projection = d3.geoMercator().fitSize([vis.width, vis.height], vis.geoData);
         vis.pathGenerator = d3.geoPath().projection(vis.projection);
-
-        // Draw Toronto neighborhoods on zoomGroup
-        vis.zoomGroup.selectAll(".neighborhood")
+    
+        // Add zoom behavior
+        vis.zoom = d3.zoom()
+            .scaleExtent([1, 10])
+            .on("zoom", (event) => {
+                vis.zoomGroup.attr("transform", event.transform);
+                vis.zoomGroup.selectAll(".crime-circle")
+                    .attr("r", 3 / event.transform.k); // resize points when zooming
+            });
+    
+        vis.svg.call(vis.zoom);
+    
+        // Draw neighborhoods
+        vis.neighborhoodLayer.selectAll(".neighborhood")
             .data(vis.geoData.features)
             .enter()
             .append("path")
@@ -64,14 +65,34 @@ class RS2Map {
             .attr("d", vis.pathGenerator)
             .attr("fill", "#f0f0f0")
             .attr("stroke", "#ccc");
-
-        // Color scale
+    
+        // Load & draw streets
+        d3.json("data/toronto_streets.geojson").then(streetData => {
+            const filtered = streetData.features.filter(d => {
+                const roadType = d.properties.highway;
+                return roadType && ["residential", "primary", "secondary", "tertiary", "primary_link"].includes(roadType.toLowerCase());
+            });
+    
+            vis.streetLayer.selectAll(".street-line")
+                .data(filtered)
+                .enter()
+                .append("path")
+                .attr("class", "street-line")
+                .attr("d", vis.pathGenerator)
+                .attr("stroke", "#999")
+                .attr("stroke-width", 0.4)
+                .attr("fill", "none")
+                .attr("opacity", 0.8);
+    
+        });
+    
         vis.colorScale = d3.scaleOrdinal()
             .domain(["Assault", "Robbery", "Theft Over", "Auto Theft", "Break and Enter"])
             .range(["#1f77b4", "#2ca02c", "#d62728", "#ff7f0e", "#9467bd"]);
-
+    
         vis.wrangleData();
     }
+    
 
 
     wrangleData() {
@@ -86,8 +107,7 @@ class RS2Map {
 
     updateVis() {
         let vis = this;
-
-        let circles = vis.zoomGroup.selectAll(".crime-circle")
+        let circles = vis.pointsLayer.selectAll(".crime-circle")
             .data(vis.displayData, d => d.EVENT_UNIQUE_ID);
 
         // Removes existing circles on the map before updating.
