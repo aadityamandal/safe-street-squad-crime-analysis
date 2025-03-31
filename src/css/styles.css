@@ -70,6 +70,12 @@ h3 {
     border: 1px solid black;
 }
 
+#intro_picture{
+    width: 100%;
+    border: 2px solid black;
+    margin-bottom: 40px;
+}
+
 
 
 /*----- SOLUTION SECTION--------*/
