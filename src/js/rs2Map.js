@@ -35,14 +35,28 @@ class RS2Map {
     vis.streetLayer = vis.zoomGroup.append("g").attr("class", "street-layer");
     vis.pointsLayer = vis.zoomGroup.append("g").attr("class", "points-layer"); // crime circles on top
 
-    vis.svg
+    const titleGroup = vis.svg.append("g").attr("class", "title-group");
+    const titleText = titleGroup
       .append("text")
       .attr("class", "map-title")
       .attr("x", vis.width / 2)
-      .attr("y", 20)
+      .attr("y", 30)
       .attr("text-anchor", "middle")
-      .text("Toronto Crime Map by MCI Category")
-      .attr("fill", "#f0f0f0");
+      .attr("fill", "#f0f0f0")
+      .attr("font-weight", "bold")
+      .text("Toronto Crime Map by MCI Category");
+
+    // Get the bounding box of the text to calculate its size
+    const textBBox = titleText.node().getBBox();
+    titleGroup
+      .insert("rect", "text")
+      .attr("x", textBBox.x - 10)
+      .attr("y", textBBox.y - 5)
+      .attr("width", textBBox.width + 20)
+      .attr("height", textBBox.height + 10)
+      .attr("fill", "black")
+      .attr("rx", 5)
+      .attr("ry", 5);
 
     vis.projection = d3.geoMercator().fitSize([vis.width, vis.height], vis.geoData);
     vis.pathGenerator = d3.geoPath().projection(vis.projection);
@@ -67,7 +81,15 @@ class RS2Map {
       .attr("class", "neighborhood")
       .attr("d", vis.pathGenerator)
       .attr("fill", "#f0f0f0")
-      .attr("stroke", "#ccc");
+      .attr("stroke", "#ccc")
+      .style("pointer-events", "all")
+      .on("mouseover", function (event, d) {
+        d3.select(this).attr("fill", "rgba(255, 255, 0, 0.4)").attr("stroke", "yellow").attr("stroke-width", 2);
+      })
+      .on("mousemove", function (event) {})
+      .on("mouseout", function () {
+        d3.select(this).attr("fill", "#f0f0f0").attr("stroke", "#ccc").attr("stroke-width", 1);
+      });
 
     // Load & draw streets
     d3.json("data/toronto_streets.geojson").then((streetData) => {
@@ -122,7 +144,8 @@ class RS2Map {
       .attr("cx", (d) => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[0])
       .attr("cy", (d) => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[1])
       .attr("r", 3)
-      .attr("fill", (d) => vis.colorScale(d.MCI_CATEGORY));
+      .attr("fill", (d) => vis.colorScale(d.MCI_CATEGORY))
+      .attr("opacity", 0.5);
 
     // Updating circles
     circles
@@ -130,7 +153,8 @@ class RS2Map {
       .duration(400)
       .attr("cx", (d) => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[0])
       .attr("cy", (d) => vis.projection([d.LONG_WGS84, d.LAT_WGS84])[1])
-      .attr("fill", (d) => vis.colorScale(d.MCI_CATEGORY));
+      .attr("fill", (d) => vis.colorScale(d.MCI_CATEGORY))
+      .attr("opacity", 0.5);
   }
 
   // Function to update crime filter based on selection
