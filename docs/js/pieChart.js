@@ -9,7 +9,7 @@ class PieChart {
         let vis = this;
 
         vis.width = 500;
-        vis.height = 500;
+        vis.height = 580;
         vis.radius = Math.min(vis.width, vis.height) / 2;
 
         vis.svg = d3.select("#" + vis.parentElement)
@@ -102,7 +102,7 @@ class PieChart {
         const legend = d3.select("#" + vis.parentElement + " svg")
             .append("g")
             .attr("class", "legend")
-            .attr("transform", `translate(${vis.width / 2 - 130 - 40}, ${vis.height + 10})`);
+            .attr("transform", `translate(${vis.width / 2 - 130 - 40}, ${vis.height - 10})`);
 
         const legendItems = legend.selectAll(".legend-item")
             .data(vis.displayData)
@@ -113,14 +113,27 @@ class PieChart {
             .attr("transform", (d, i) => `translate(${(i % 3) * 130}, ${Math.floor(i / 3) * 20})`);
 
         legendItems.append("rect")
-            .attr("width", 12)
-            .attr("height", 12)
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("y", (d, i) => {
+                if (i <= 2) {
+                    return 0;
+                } else {
+                    return 5;
+                }
+            })
             .attr("fill", d => vis.color(d.category));
 
         legendItems.append("text")
-            .attr("x", 18)
-            .attr("y", 10)
+            .attr("x", 25)
+            .attr("y", (d, i) => {
+                if (i <= 2) {
+                    return 16;
+                } else {
+                    return 21;
+                }
+            })
             .text(d => d.category)
-            .style("font-size", "12px");
+            .style("font-size", "16px");
     }
 }

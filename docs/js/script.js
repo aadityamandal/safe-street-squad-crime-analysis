@@ -119,7 +119,7 @@ function initRisingInsight1Chart(data) {
   console.log(finalData);
 
   // Pass the processed data to the chart
-  const colorScale = d3.scaleOrdinal().domain(["Morning", "Afternoon", "Evening", "Night"]).range(["#FFD700", "#FF8C00", "#FF4500", "#00008B"]);
+  const colorScale = d3.scaleOrdinal().domain(["Morning", "Afternoon", "Evening", "Night"]).range(["#FFD700", "#FF8C00", "#FF4500", "#F6F2F7"]);
   risingInsight1Chart = new LineChart(`rising-insight-1-chart`, finalData, colorScale, "slider", d3.curveLinear, "category-filter-timeOfDay");
 }
 
