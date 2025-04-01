@@ -61,6 +61,7 @@ class LineChart {
       .attr("x", vis.width / 2)
       .attr("y", vis.height + 40)
       .attr("text-anchor", "middle")
+      .style("fill", "white")
       .text("Years");
 
     // Y-Axis Label
@@ -70,6 +71,7 @@ class LineChart {
       .attr("y", -55)
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
+      .style("fill", "white")
       .text("Number of Incidents");
 
     // Legend
@@ -100,7 +102,9 @@ class LineChart {
       .attr("x", legendWidth + 5) // Position text to the right of the square
       .attr("y", (d, i) => i * (legendHeight + 5) + legendHeight / 2)
       .attr("dy", ".35em")
+      .style("fill", "white")
       .text((d) => d); // Use the category name as the label
+      
 
     // Initializer slider with our data range for years
     vis.slider = document.getElementById(vis.sliderID);
