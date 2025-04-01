@@ -185,6 +185,49 @@ class RS2Map {
       .domain(["Assault", "Robbery", "Theft Over", "Auto Theft", "Break and Enter"])
       .range(["#1f77b4", "#2ca02c", "#d62728", "#ff7f0e", "#9467bd"]);
 
+    vis.legendGroup = vis.svg
+      .append("g")
+      .attr("class", "legend-group")
+      .attr("transform", `translate(${vis.width - 180}, ${vis.margin.top + 20})`);
+
+    // Creating the legend for the MCI crime categories
+    let rs2Legend = [
+      { label: "Assault", color: "#1f77b4" },
+      { label: "Robbery", color: "#2ca02c" },
+      { label: "Break and Enter", color: "#9467bd" },
+      { label: "Theft Over", color: "#d62728" },
+      { label: "Auto Theft", color: "#ff7f0e" },
+    ];
+
+    // Legend title
+    vis.legendGroup.append("text").attr("x", 40).attr("y", 0).attr("font-weight", "bold").attr("fill", "#f0f0f0").text("Crime Category");
+
+    let rs2LegendItem = vis.legendGroup
+      .selectAll(".rs2-legend-item")
+      .data(rs2Legend)
+      .enter()
+      .append("g")
+      .attr("class", "rs2-legend-item")
+      .attr("transform", (d, i) => `translate(0, ${20 + i * 20})`);
+
+    // Legend rectangles
+    rs2LegendItem
+      .append("rect")
+      .attr("x", 40)
+      .attr("y", (d, i) => i * 5)
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("fill", (d) => d.color);
+
+    // Text labels
+    rs2LegendItem
+      .append("text")
+      .attr("x", 40 + 25)
+      .attr("y", (d, i) => i * 5 + 15)
+      .attr("font-size", "16px")
+      .attr("fill", "#f0f0f0")
+      .text((d) => d.label);
+
     vis.wrangleData();
   }
 
