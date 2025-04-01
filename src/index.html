@@ -4,53 +4,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toronto Crime Visualization</title>
+    <title>Toronto Crime Visualization | Safety Analysis</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.4.0/nouislider.css"
         integrity="sha512-DGB74Gyw93qON+V0QxSRs1er6sqoPyFoy23HBL5LN7MRJBcjeCU22zega+vOEGE0XQLoVrv4ExcaesSTwZQA2w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-
-
-
-
-
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="text-center">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        AOS.init();
+        AOS.init({
+            duration: 1000,
+            once: false,
+            mirror: true
+        });
     </script>
-    <div data-aos="fade-up" data-aos-duration="1000">
-        <h1 class="my-4">How Safe is Toronto? Understanding Crime Trends &amp Walking Safety</h1>
-        <p>A high-level introduction explaining why analyzing crime patterns is important for making informed decisions
-            about safety, especially when walking alone at night.</p>
-    </div>
-    
 
-
+    <!-- Introduction Section -->
     <div class="container">
-        <div data-aos="fade-up" data-aos-duration="1000">
-            <img src="img/intro_picture.jpg" id="intro_picture">
-        </div>
-        <p>Crime rates in Toronto have been rising, making public safety a growing concern for residents, students, and policymakers alike.
-            People desire to live and work in secure communities without the constant worry of crime and violence looming over them. A safe 
-            neighborhood is a thriving environment for the healhty development of families, friendships, and businesses. The lack of danger promotes economic growth, social 
-            relationships, and educational opportunities that drive society forward. As residents of Toronto, it is important to better understand crime patterns 
-            and the factors that influence neighborhood safety. Through the analysis of crime hotspots, distribution and trends, we aim to explore the evolution of Toronto's 
-            criminal landscape. A key motivation of this project is the development of a Crime Safety Index which will help you assess which Toronto neighbourhoods are safe for 
-            you to live in or vist.
-        </p>
-        <!-- Hook -->
-        <div class="row my-5">
-            <!-- <h2>Hook</h2> -->
-            <p class="d-inline-block p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
-                data-aos="flip-left" data-aos-duration="1000">Can we walk around
-                without fear alone at night?</p>
+        <!-- Title and Introduction -->
+        <section id="intro" class="story-section">
+            <div data-aos="fade-up">
+                <h1 class="mb-4">How Safe is Toronto? <span class="d-block fs-5 mt-2">Understanding Crime Trends & Walking Safety</span></h1>
+                <img src="img/intro_picture.jpg" id="intro_picture" alt="Toronto cityscape at night" data-aos="zoom-in" data-aos-delay="300">
+                <p class="lead fs-5" data-aos="fade-up" data-aos-delay="600">
+                    Crime rates in Toronto have been rising, making public safety a growing concern for residents, students, and policymakers alike.
+                    People desire to live and work in secure communities without the constant worry of crime and violence looming over them.
+                </p>
+                <p data-aos="fade-up" data-aos-delay="700">
+                    A safe neighborhood is a thriving environment for the healthy development of families, friendships, and businesses. 
+                    The lack of danger promotes economic growth, social relationships, and educational opportunities that drive society forward.
+                </p>
+                <p data-aos="fade-up" data-aos-delay="800">
+                    As residents of Toronto, it is important to better understand crime patterns and the factors that influence neighborhood safety. 
+                    Through the analysis of crime hotspots, distribution and trends, we aim to explore the evolution of Toronto's 
+                    criminal landscape. A key motivation of this project is the development of a <strong class="text-success">Crime Safety Index</strong> 
+                    which will help you assess which Toronto neighbourhoods are safe for you to live in or visit.
+                </p>
+            </div>
+        </section>
+
+        <!-- Problem Statement Section -->
+        <section id="problem" class="story-section">
+            <h2 data-aos="fade-right">The Problem</h2>
+            <div class="highlight-box yellow" data-aos="flip-left">
+                <p class="fs-5 mb-0">Can we walk around without fear alone at night?</p>
+            </div>
             <div class="col">
-                <div class="line-chart-container" id="hook-chart"></div>
+                <div class="line-chart-container" id="hook-chart" data-aos="fade-up"></div>
             </div>
             <div class="container py-3 d-flex justify-content-center align-items-center">
                 <div class="w-100">
@@ -72,47 +77,50 @@
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="line-assault" value="ASSAULT"
                                     checked>
-                                <label class="form-check-label" for="line-assault">Assault</label>
+                                <label class="form-check-label category-assault" for="line-assault">Assault</label>
                             </div>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="line-robbery" value="ROBBERY"
                                     checked>
-                                <label class="form-check-label" for="line-robbery">Robbery</label>
+                                <label class="form-check-label category-robbery" for="line-robbery">Robbery</label>
                             </div>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="line-theftover" value="THEFTOVER"
                                     checked>
-                                <label class="form-check-label" for="line-theftover">Theft Over</label>
+                                <label class="form-check-label category-theftover" for="line-theftover">Theft Over</label>
                             </div>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="line-autotheft" value="AUTOTHEFT"
                                     checked>
-                                <label class="form-check-label" for="line-autotheft">Auto Theft</label>
+                                <label class="form-check-label category-autotheft" for="line-autotheft">Auto Theft</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="line-breakenter" value="BREAKENTER"
                                     checked>
-                                <label class="form-check-label" for="line-breakenter">Break &amp Enter</label>
+                                <label class="form-check-label category-breakenter" for="line-breakenter">Break &amp; Enter</label>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <p class="mt-4" data-aos="fade-up">
+                The chart above shows significant trends in crime categories over the past decade in Toronto.
+                These patterns raise important questions about our daily safety in different parts of the city.
+            </p>
+        </section>
 
-        <!-- Rising Insight #1 -->
-        <div class="row my-5">
-            <!-- <h2>Rising Insight #1</h2> -->
-            <p class="d-inline-block p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
-                data-aos="zoom-in-up" data-aos-duration="1000">Crime trends have
-                changed significantly over the past decade, but timing matters just as much.
-
+        <!-- First Insight Section -->
+        <section id="insight-1" class="story-section">
+            <h2 data-aos="fade-right">Insight: Time of Day Matters</h2>
+            <div class="highlight-box yellow" data-aos="zoom-in-up">
+                <p class="fs-5 mb-0">Crime trends have changed significantly over the past decade, but timing matters just as much.
                 Are there specific times of day when crimes spike?</p>
+            </div>
             <div class="col">
-                <div class="line-chart-container" id="rising-insight-1-chart"></div>
+                <div class="line-chart-container" id="rising-insight-1-chart" data-aos="fade-up"></div>
             </div>
             <div class="container py-3 d-flex justify-content-center align-items-center">
                 <div class="w-100">
@@ -129,7 +137,7 @@
                     <!-- Category Filter Section -->
                     <div class="row mb-3 d-flex align-items-center justify-content-center gap-3">
                         <div id="category-filter-timeOfDay" class="category-filter-container col-auto">
-                            <label><strong>Show Categories:</strong></label>
+                            <label><strong>Show Times of Day:</strong></label>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" id="line-morning" value="Morning"
@@ -158,35 +166,29 @@
                 </div>
             </div>
 
+            <div class="highlight-box yellow mt-4" data-aos="zoom-out">
+                <p class="fs-5 mb-0">
+                    If so, should we reconsider when it's safest to be out alone?
+                </p>
+            </div>
+            <p class="mt-4" data-aos="fade-up">
+                Understanding the temporal patterns of crime can help us plan safer movements throughout the city and avoid high-risk times of day.
+            </p>
+        </section>
 
-
-
-            <p class="mt-3 padding-top p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
-                data-aos="zoom-out">
-                If so, should we
-                reconsider when it's safest to be out alone?</p>
-
-        </div>
-
-        <!-- Rising Insight #2 Sketch -->
-        <div class="row my-5">
-            <div class="col">
-                <!-- <h2>Rising Insight #2</h2> -->
-                <p class="d-inline-block p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
-                    data-aos="fade-right" data-aos-duration="1000">
+        <!-- Second Insight Section -->
+        <section id="insight-2" class="story-section">
+            <h2 data-aos="fade-right">Insight: Location Matters</h2>
+            <div class="highlight-box yellow" data-aos="fade-right">
+                <p class="fs-5 mb-0">
                     Of course, crime isn't just about <i>when</i> it happens— it also depends on <i>where</i>.<br>
                     Let's explore how crime patterns shift between different city zones.
                 </p>
-                <p>This section presents the planned visualization for analyzing crime patterns in urban and suburban
-                    areas.</p>
+            </div>
 
-                <!-- Insert Sketch Image -->
-                <!-- <img src="data/placeholder_sketches/rising_insight1_sketch.png"
-                    alt="Rising Insight #2 Visualization Sketch" class="img-fluid"
-                    style="max-width: 80%; height: auto; border: 1px solid #ddd; padding: 10px; margin-top: 10px;"> -->
-
-                <div class="row">
-                    <select class="form-select" id="rs2-form" aria-label="Default select example">
+            <div class="row mt-4">
+                <div class="col-md-12" data-aos="fade-up">
+                    <select class="form-select" id="rs2-form" aria-label="Select crime category">
                         <option value="All MCI Categories">All MCI Categories</option>
                         <option value="Assault" selected>Assault</option>
                         <option value="Robbery">Robbery</option>
@@ -195,216 +197,198 @@
                         <option value="Auto Theft">Auto Theft</option>
                     </select>
                 </div>
-                <div class="row">
-                    <div class="rising-insight-2" id="rising-insight-2"></div>
-                </div>
-
-                <!-- Description of Planned Interactions -->
-                <p class="mt-3">
-                    This visualization will explore crime trends across different regions, focusing on comparisons
-                    between urban and suburban crime distribution. Users will be able to explore the map
-                    to see which areas have the highest occurrences of different crimes.
-                </p>
+                <div class="rising-insight-2" id="rising-insight-2" data-aos="fade-up" data-aos-delay="300"></div>
             </div>
-        </div>
 
+            <p class="mt-4" data-aos="fade-up">
+                This map reveals how crime patterns vary significantly across Toronto's neighborhoods, with certain areas showing higher concentrations of specific crime types.
+                Understanding these spatial patterns is essential for making informed decisions about where to live, work, or spend time in the city.
+            </p>
+        </section>
 
-
-
-        <!-- Message -->
-        <div class="row my-5">
-            <div class="col">
-                <p class="d-inline-block p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
-                    data-aos="zoom-out" data-aos-duration="1000">
+        <!-- Urban vs Suburban Section -->
+        <section id="urban-suburban" class="story-section">
+            <h2 data-aos="fade-right">Urban vs Suburban Crime</h2>
+            <div class="highlight-box yellow" data-aos="zoom-out">
+                <p class="fs-5 mb-0">
                     Where you live also plays a huge role in crime exposure — let's break down how urban and suburban
                     areas differ in terms of crime type and frequency.
                 </p>
-
-                <p class="text-center mt-3">
-                    This visualization compares the crime distribution between urban and suburban areas in Toronto.
-                </p>
-
-                <div class="row justify-content-center">
-                    <div class="col-md-5 text-center mb-4">
-                      <h3>Urban Crime Distribution</h3>
-                      <div id="urban-pie-chart"></div>
-                    </div>
-                    <div class="col-md-5 text-center mb-4">
-                      <h3>Suburban Crime Distribution</h3>
-                      <div id="suburban-pie-chart"></div>
-                    </div>
-                  </div>
-                  
             </div>
-        </div>
 
+            <p class="text-center mt-4" data-aos="fade-up">
+                This visualization compares the crime distribution between urban and suburban areas in Toronto,
+                revealing distinct patterns that can inform safer living choices.
+            </p>
 
+            <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-md-5 text-center mb-4">
+                    <h3>Urban Crime Distribution</h3>
+                    <div id="urban-pie-chart"></div>
+                </div>
+                <div class="col-md-5 text-center mb-4">
+                    <h3>Suburban Crime Distribution</h3>
+                    <div id="suburban-pie-chart"></div>
+                </div>
+            </div>
+            
+            <p class="mt-4" data-aos="fade-up">
+                Notice how the crime profiles differ between urban and suburban areas. These distinct patterns highlight the importance
+                of location-specific safety considerations when choosing where to live or visit in Toronto.
+            </p>
+        </section>
 
         <!-- Solution Section -->
-        <div class="row my-5">
-            <div class="col">
-                <h2>Solution: Walking Safety Checker</h2>
-                <p class="text-muted">
-                    This interactive tool helps Toronto residents visualize how safe their walking routes are based on historical crime data.
-                    <br>
-                    By highlighting crime density along specific walking paths, this tool raises awareness about day-to-day exposure to urban crime
-                    and helps promote safer route decisions and preventative planning.
-                  </p>
+        <section id="solution" class="solution-section">
+            <h2 data-aos="fade-right">Solution: Walking Safety Checker</h2>
+            <p class="text-muted" data-aos="fade-up">
+                This interactive tool helps Toronto residents visualize how safe their walking routes are based on historical crime data.
+                <br>
+                By highlighting crime density along specific walking paths, this tool raises awareness about day-to-day exposure to urban crime
+                and helps promote safer route decisions and preventative planning.
+            </p>
 
-                <!-- Input Fields for Source and Destination -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div style="position: relative; flex-grow: 1; margin-right: 10px;">
-                        <input id="start-location" type="text" class="form-control form-control-lg"
-                            placeholder="📍 Enter starting location">
-                        <div id="start-location-suggestions" class="autocomplete-dropdown"></div>
-                    </div>
-
-                    <div style="position: relative; flex-grow: 1;">
-                        <input id="end-location" type="text" class="form-control form-control-lg"
-                            placeholder="🚏 Enter destination">
-                        <div id="end-location-suggestions" class="autocomplete-dropdown"></div>
-                    </div>
+            <!-- Input Fields for Source and Destination -->
+            <div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-up">
+                <div style="position: relative; flex-grow: 1; margin-right: 10px;">
+                    <input id="start-location" type="text" class="form-control form-control-lg"
+                        placeholder="📍 Enter starting location">
+                    <div id="start-location-suggestions" class="autocomplete-dropdown"></div>
                 </div>
 
-                <!-- Safety Check Button -->
-                <button class="btn btn-primary w-100 fw-bold mb-3" id="safety-check-btn">🔎 Check How Safe I
-                    Will Be</button>
-
-                <!-- Loading Indicator -->
-                <div id="loading-indicator" class="text-center fw-semibold text-muted mb-2" style="display: none;">
-                    Calculating safety score... Please wait.
+                <div style="position: relative; flex-grow: 1;">
+                    <input id="end-location" type="text" class="form-control form-control-lg"
+                        placeholder="🚏 Enter destination">
+                    <div id="end-location-suggestions" class="autocomplete-dropdown"></div>
                 </div>
+            </div>
 
-                <!-- Placeholder for Output Score -->
-                <h3 id="safety-score" class="text-center mt-4">Crimes Reported Near Route: -</h3>
+            <!-- Safety Check Button -->
+            <button class="btn btn-primary w-100 fw-bold mb-3" id="safety-check-btn" data-aos="fade-up" data-aos-delay="300">
+                🔎 Check How Safe I Will Be
+            </button>
 
-                <!-- Insert Map Container -->
-                <div id="map-container" class="mt-3">
-                    <svg id="map-svg"></svg>
-                </div>
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="text-center fw-semibold text-muted mb-2" style="display: none;">
+                Calculating safety score... Please wait.
+            </div>
 
-                <style>
-                    #map-container {
-                        width: 100%;
-                        height: 500px;
-                        position: relative;
-                        border: 1px solid #ccc;
-                        /* Subtle border for clarity */
-                        border-radius: 10px;
-                        /* Rounded edges */
-                        overflow: hidden;
-                    }
+            <!-- Placeholder for Output Score -->
+            <h3 id="safety-score" class="text-center mt-4">Crimes Reported Near Route: -</h3>
 
-                    svg {
-                        width: 100%;
-                        height: 100%;
-                    }
-                </style>
-                <div class="mb-3">
-                    <button class="btn btn-outline-dark w-100 text-start fw-bold" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#instructionsCollapse">
-                        Instructions: How to Use This Tool ⬇
-                    </button>
-                    <div id="instructionsCollapse" class="collapse mt-2">
-                        <div class="border p-3 rounded bg-light">
-                          <p>This tool helps you check <b>how safe</b> your walking route is based on historical crime data.</p>
-                          <p><b>Steps to Use:</b></p>
-                          <ul class="text-start ps-3">
+            <!-- Insert Map Container -->
+            <div id="map-container" class="mt-3" data-aos="zoom-in" data-aos-delay="400">
+                <svg id="map-svg"></svg>
+            </div>
+
+            <!-- Instructions Section -->
+            <div class="mt-4" data-aos="fade-up">
+                <button class="btn btn-outline-dark w-100 text-start fw-bold" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#instructionsCollapse">
+                    Instructions: How to Use This Tool ⬇
+                </button>
+                <div id="instructionsCollapse" class="collapse mt-2">
+                    <div class="border p-3 rounded bg-light">
+                        <p>This tool helps you check <b>how safe</b> your walking route is based on historical crime data.</p>
+                        <p><b>Steps to Use:</b></p>
+                        <ul class="text-start ps-3">
                             <li>Enter your <b>starting location</b> and <b>destination</b>.</li>
                             <li>Click <b>"Check How Safe I Will Be"</b> to analyze the safety of your walk.</li>
                             <li>The <b>map will update</b>, displaying safety zones and crime risk areas.</li>
                             <li>The tool will provide a <b>safety index score</b> (higher = safer).</li>
-                          </ul>
-                        </div>
-                      </div>
-                      
+                        </ul>
+                    </div>
                 </div>
+            </div>
 
-
-                <!-- Section 2: Safety Index Calculation (Collapsible) -->
-                <div class="mt-3">
-                    <button class="btn btn-outline-dark w-100 text-start fw-bold" type="button"
-                        data-bs-toggle="collapse" data-bs-target="#calculationCollapse">
-                        How the Safety Score is Calculated ⬇
-                    </button>
-                    <div id="calculationCollapse" class="collapse mt-2">
-                        <div class="border p-3 rounded bg-light">
-                          <p><b>The Safety Index is calculated based on:</b></p>
-                          <ul class="text-start ps-3">
+            <!-- Safety Score Calculation Section -->
+            <div class="mt-3" data-aos="fade-up" data-aos-delay="200">
+                <button class="btn btn-outline-dark w-100 text-start fw-bold" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#calculationCollapse">
+                    How the Safety Score is Calculated ⬇
+                </button>
+                <div id="calculationCollapse" class="collapse mt-2">
+                    <div class="border p-3 rounded bg-light">
+                        <p><b>The Safety Index is calculated based on:</b></p>
+                        <ul class="text-start ps-3">
                             <li><b>Crime Rate:</b> Number of reported crimes along your route.</li>
                             <li><b>Location Density:</b> More populated areas tend to be safer.</li>
                             <li><b>Severity of Crimes:</b> Violent crimes reduce the score more.</li>
                             <li><b>Distance Factor:</b> Longer walks <b>lower</b> the safety score.</li>
                             <li><b>Crime Recency:</b> Recent incidents impact the score more.</li>
-                          </ul>
-                          <p><b>Score Interpretation:</b></p>
-                          <ul class="text-start ps-3">
+                        </ul>
+                        <p><b>Score Interpretation:</b></p>
+                        <ul class="text-start ps-3">
                             <li><b>7 - 10</b> → <b>Safe to walk</b></li>
                             <li><b>4 - 6.9</b> → <b>Walk with caution</b></li>
                             <li><b>2 - 3.9</b> → <b>Better to use a car</b></li>
                             <li><b>Below 2</b> → <b>Extremely unsafe</b></li>
-                          </ul>
-                        </div>
-                      </div>
-                      
-                    <!-- Example Use Case (Always Visible) -->
-                    <div class="mt-4 border p-3 rounded bg-light">
-                        <p><b>Scenario:</b></p>
-                        <p>A user enters '<b>Union Station</b>' as their starting point and '<b>Bahen Centre for
-                            Information Technology</b>' as their destination.</p>
-                        <p>The system calculates a <b>Safety Score of 3.0</b>, meaning:</p>
-                        <ul class="text-start ps-3">
-                          <li>There have been multiple <b>reported crimes along this route</b>.</li>
-                          <li>It's <b>not the safest path</b>—walking with caution is advised.</li>
-                          <li>Alternative <b>transport options</b> like TTC or Uber might be preferable.</li>
                         </ul>
-                      </div>
-                      
-
+                    </div>
                 </div>
-
             </div>
-        </div>
+                
+            <!-- Example Use Case -->
+            <div class="mt-4 border p-3 rounded bg-light" data-aos="fade-up" data-aos-delay="300">
+                <p><b>Scenario:</b></p>
+                <p>A user enters '<b>Union Station</b>' as their starting point and '<b>Bahen Centre for
+                    Information Technology</b>' as their destination.</p>
+                <p>The system calculates a <b>Safety Score
+                    <p>The system calculates a <b>Safety Score of 3.0</b>, meaning:</p>
+                <ul class="text-start ps-3">
+                    <li>There have been multiple <b>reported crimes along this route</b>.</li>
+                    <li>It's <b>not the safest path</b>—walking with caution is advised.</li>
+                    <li>Alternative <b>transport options</b> like TTC or Uber might be preferable.</li>
+                </ul>
+            </div>
+        </section>
 
-
-        <!------------------ SOLUTION END----------------->>
-
-
-
-        <!-- Final -->
-        <div class="row my-5">
-            <div class="col">
-                <!-- <h2>Final</h2> -->
-                <p class="d-inline-block p-3 border rounded shadow-sm" style="background-color: #fffcbc;"
-                    data-aos="zoom-in" data-aos-duration="1000">Based on these
-                    insights, we can make more informed decisions about where and when to travel alone.
+        <!-- Conclusion Section -->
+        <section id="conclusion" class="story-section">
+            <h2 data-aos="fade-right">Conclusion</h2>
+            <div class="highlight-box yellow" data-aos="zoom-in">
+                <p class="fs-5 mb-0">
+                    Based on these insights, we can make more informed decisions about where and when to travel alone.
                     Whether you're commuting at night, choosing a neighborhood to live in, or just exploring the
-                    city—awareness is key to safety.</p>
+                    city—awareness is key to safety.
+                </p>
             </div>
-        </div>
+            
+            <p class="mt-4" data-aos="fade-up">
+                Throughout this analysis, we've identified that both time and location play crucial roles in Toronto's crime landscape. 
+                By leveraging this data, residents can make more informed decisions about their daily routines and travel patterns.
+            </p>
+            
+            <p data-aos="fade-up" data-aos-delay="200">
+                The Walking Safety Checker provides a practical application of this knowledge, offering personalized 
+                safety insights for specific routes throughout the city. We hope this tool helps Toronto residents navigate 
+                the city with greater confidence and awareness.
+            </p>
+        </section>
 
         <!-- Sources Section -->
-        <div class="container my-5" data-aos="fade-right" data-aos-duration="1000">
-            <h2 class="text-center mb-4">Sources</h2>
-            <ul class="list-unstyled text-center">
-                <li><a href="https://data.torontopolice.on.ca/datasets/TorontoPS::neighbourhood-crime-rates-open-data/about"
-                        target="_blank">
-                        Neighbourhood Crime Rates Open Data</a></li>
-                <li><a href="https://data.torontopolice.on.ca/datasets/TorontoPS::major-crime-indicators-open-data/about"
-                        target="_blank">
-                        Major Crime Indicators Open Data</a></li>
-                <li><a href="https://data.torontopolice.on.ca/datasets/TorontoPS::shooting-and-firearm-discharges-open-data/about"
-                        target="_blank">
-                        Shooting and Firearm Discharges Open Data</a></li>
-            </ul>
-        </div>
-
-
-
-
-
-
+        <footer class="footer" data-aos="fade-right">
+            <div class="container">
+                <h2 class="text-center mb-4">Sources</h2>
+                <ul class="list-unstyled text-center">
+                    <li class="mb-2"><a href="https://data.torontopolice.on.ca/datasets/TorontoPS::neighbourhood-crime-rates-open-data/about"
+                            target="_blank">
+                            Neighbourhood Crime Rates Open Data</a></li>
+                    <li class="mb-2"><a href="https://data.torontopolice.on.ca/datasets/TorontoPS::major-crime-indicators-open-data/about"
+                            target="_blank">
+                            Major Crime Indicators Open Data</a></li>
+                    <li class="mb-2"><a href="https://data.torontopolice.on.ca/datasets/TorontoPS::shooting-and-firearm-discharges-open-data/about"
+                            target="_blank">
+                            Shooting and Firearm Discharges Open Data</a></li>
+                </ul>
+                <p class="text-center mt-4 text-muted">
+                    © 2023 Toronto Crime Visualization Project | CSC316 Final Project
+                </p>
+            </div>
+        </footer>
     </div>
+
+
     
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.4.0/nouislider.min.js"
@@ -416,9 +400,6 @@
     <script src="js/rs2Map.js"></script>
     <script src="js/map.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
 </body>
 
 </html>

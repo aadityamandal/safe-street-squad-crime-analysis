@@ -109,6 +109,7 @@ class PieChart {
             .enter()
             .append("g")
             .attr("class", "legend-item")
+            .style("fill", "white")
             .attr("transform", (d, i) => `translate(${(i % 3) * 130}, ${Math.floor(i / 3) * 20})`);
 
         legendItems.append("rect")
