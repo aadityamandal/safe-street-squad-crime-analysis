@@ -537,3 +537,28 @@ option {
     text-align: center;
     font: 12px sans-serif;
 }
+
+#scroll-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(30, 30, 30, 0.95);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+    z-index: 9999;
+    opacity: 0;
+    animation: fadeInOut 4s ease forwards;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  }
+  
+  @keyframes fadeInOut {
+    0%   { opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  

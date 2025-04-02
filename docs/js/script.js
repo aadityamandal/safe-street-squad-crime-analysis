@@ -175,3 +175,12 @@ function initRisingInsight2Chart(data) {
   new PieChart("urban-pie-chart", urbanCrimeData);
   new PieChart("suburban-pie-chart", suburbanCrimeData);
 }
+
+window.addEventListener("load", () => {
+  const popup = document.getElementById("scroll-popup");
+  popup.style.display = "block";
+
+  setTimeout(() => {
+    popup.style.display = "none";
+  }, 3000); 
+});
