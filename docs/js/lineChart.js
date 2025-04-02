@@ -259,18 +259,31 @@ class LineChart {
           (exit) => exit.transition().duration(TRANSITION_DURATION).attr("cx", 0).attr("cy", 0).attr("r", 0).style("opacity", 0).remove()
         );
 
-      // Apply handlers separately
+      // Apply handlers separately. We just increase circle radius slightly and show tooltip text.
       const originalColor = vis.colorScale(category);
       circles
-        .on("mouseover", function () {
+        .on("mouseover", function (event, d) {
           d3.select(this).attr("fill", "white");
           d3.select(this).attr("stroke", originalColor);
           d3.select(this).attr("r", 7);
+
+          // const toolTipText = `<strong>${category}</strong><br>Year: ${d3.timeFormat("%Y")(d.year)}<br>Incidents: ${d[category]}`;
+          const toolTipText = `<div style="border: thin solid lightgray; border-radius: 5px; background: rgba(0, 0, 0, 0.7); padding: 20px; color: white;">
+          <strong>${category}</strong><br>Year: ${d3.timeFormat("%Y")(d.year)}<br>Incidents: ${d[category]}                     
+        </div>`;
+
+          vis.tooltip
+            .style("opacity", 1)
+            .style("left", event.pageX + 10 + "px")
+            .style("top", event.pageY + "px")
+            .html(toolTipText);
         })
-        .on("mouseout", function () {
+        .on("mouseout", function (event, d) {
           d3.select(this).attr("r", 5);
           d3.select(this).attr("stroke", "black");
           d3.select(this).attr("fill", originalColor);
+
+          vis.tooltip.style("opacity", 0).style("left", 0).style("top", 0).html(``);
         });
     });
 
