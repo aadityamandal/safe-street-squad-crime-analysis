@@ -118,7 +118,8 @@ p {
     border-radius: 5px;
 }
 
-.axis path, .axis line {
+.axis path,
+.axis line {
     fill: none;
     stroke: #666;
     shape-rendering: crispEdges;
@@ -162,8 +163,9 @@ p {
 
 .solution-section .text-muted {
     color: #ffffff !important;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.5) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
 }
+
 .solution-section h2 {
     color: #81c784;
     border-bottom: 1px solid #43a047;
@@ -273,7 +275,7 @@ p {
     background-color: #2a2a2a !important;
     border: 2px solid #4a79cf !important;
     color: #ffffff !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
 }
 
 /* Autocomplete dropdown */
@@ -327,7 +329,8 @@ p {
 }
 
 /* Pie Charts */
-#urban-pie-chart, #suburban-pie-chart {
+#urban-pie-chart,
+#suburban-pie-chart {
     background-color: #1e1e1e;
     border-radius: 10px;
     padding: 20px;
@@ -399,18 +402,29 @@ div[style*="position: relative"] {
 }
 
 body {
-    color: #e0e0e0 !important; 
+    color: #e0e0e0 !important;
 }
 
-p, span, div, label, li, h1, h2, h3, h4, h5, h6 {
-    color: #e0e0e0 !important; 
+p,
+span,
+div,
+label,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #e0e0e0 !important;
 }
 
 .text-muted {
     color: #aaaaaa !important;
 }
 
-select, option {
+select,
+option {
     color: #e0e0e0 !important;
     background-color: #333 !important;
 }
@@ -421,20 +435,20 @@ select, option {
         padding: 20px;
         margin: 60px 0;
     }
-    
+
     h1 {
         font-size: 2rem;
     }
-    
+
     h2 {
         font-size: 1.5rem;
     }
-    
+
     .line-chart-container,
     .rising-insight-2 {
         height: 50vh;
     }
-    
+
     .story-nav {
         display: none;
     }
@@ -463,7 +477,7 @@ select, option {
     fill: #dddddd !important;
 }
 
-#start-location, 
+#start-location,
 #end-location {
     background-color: #ffffff !important;
     color: #333333 !important;
@@ -471,16 +485,30 @@ select, option {
     font-weight: 500 !important;
 }
 
-#start-location::placeholder, 
+#start-location::placeholder,
 #end-location::placeholder {
     color: #666666 !important;
 }
 
-.category-assault { color: #1f77b4 !important; }
-.category-robbery { color: #2ca02c !important; }
-.category-breakenter { color: #9467bd !important; }
-.category-theftover { color: #d62728 !important; }
-.category-autotheft { color: #ff7f0e !important; }
+.category-assault {
+    color: #1f77b4 !important;
+}
+
+.category-robbery {
+    color: #2ca02c !important;
+}
+
+.category-breakenter {
+    color: #9467bd !important;
+}
+
+.category-theftover {
+    color: #d62728 !important;
+}
+
+.category-autotheft {
+    color: #ff7f0e !important;
+}
 
 .route-line {
     stroke: #4a79cf !important;
@@ -490,4 +518,22 @@ select, option {
 
 .text-center.mt-4.text-muted {
     color: #ffffff !important;
+}
+
+.noUi-connect {
+    background-color: #ff5733 !important;
+}
+
+.noUi-tooltip {
+    background-color: #333 !important;
+    color: #fff !important;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    font: 12px sans-serif;
 }
