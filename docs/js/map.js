@@ -1,13 +1,13 @@
 class SafetyIndexMap {
   constructor(parentElement) {
     this.parentElement = parentElement;
-    this.majorCrimesData = []; // Initialize as an empty array for the crime data
-    this.routeLine = null; // Reference for the route line
-    this.totalDistance = 0; // Store the distance
-    this.start = null; // Store start coordinates
-    this.destination = null; // Store destination coordinates
-    this.routePoints = []; // Store route points
-    this.crimeAnalysisResult = null; // Store crime analysis results
+    this.majorCrimesData = []; 
+    this.routeLine = null;
+    this.totalDistance = 0; 
+    this.start = null; 
+    this.destination = null; 
+    this.routePoints = [];
+    this.crimeAnalysisResult = null; 
     
     // Load crime data when initialized
     this.loadCrimeData();
@@ -30,8 +30,8 @@ class SafetyIndexMap {
     
     // Define Projection (Centered on Toronto)
     vis.projection = d3.geoMercator()
-      .center([-79.3832, 43.7]) // Centered on Toronto
-      .scale(70000) // Adjusted for proper zoom
+      .center([-79.3832, 43.7]) 
+      .scale(70000) 
       .translate([vis.width / 2, vis.height / 2]);
     
     // Setup visualization components and handlers
@@ -148,18 +148,6 @@ class SafetyIndexMap {
     document.getElementById("safety-score").innerHTML =
       `<strong>Safety Score: ${vis.safetyScore.toFixed(1)} (Crimes Nearby in the Past: ${vis.crimeAnalysisResult.crimeCount})</strong><br>${riskMessage}`;
   }
-
-
-  // calculateBearing(lat1, lon1, lat2, lon2) {
-  //   const toRadians = deg => deg * Math.PI / 180;
-  //   const dLon = toRadians(lon2 - lon1);
-  //   const y = Math.sin(dLon) * Math.cos(toRadians(lat2));
-  //   const x = Math.cos(toRadians(lat1)) * Math.sin(toRadians(lat2)) -
-  //             Math.sin(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.cos(dLon);
-  //   const bearing = Math.atan2(y, x) * 180 / Math.PI;
-  //   return (bearing + 360) % 360; // Normalize to 0–360°
-  // }
-
   
   getCrimesNearRoute(start, end) {
     const vis = this;
@@ -227,8 +215,8 @@ class SafetyIndexMap {
           const safeDistance = vis.totalDistance || 0.1;  // Default to 0.1 km if undefined
     
           // Dynamically adjust marker size based on zoom and route length
-          const minSize = safeDistance < 0.5 ? 1 : 2;  // Super small for very short distances
-          const maxSize = safeDistance < 0.5 ? 3 : 6;  // Keeps it tiny when zoomed in
+          const minSize = safeDistance < 0.5 ? 1 : 2; 
+          const maxSize = safeDistance < 0.5 ? 3 : 6;  
     
           // Scale Markers Properly (Now Smaller at Street Level)
           vis.g.selectAll(".marker")
@@ -247,7 +235,7 @@ class SafetyIndexMap {
     d3.json("data/toronto_streets.geojson").then(streetData => {
       // Filter only "secondary" and "primary_link" and residential roads
       const majorRoads = streetData.features.filter(d => {
-        const roadClass = d.properties.highway; // Make sure "highway" is the correct key
+        const roadClass = d.properties.highway; 
         return roadClass && ["secondary", "primary_link", "residential"].includes(roadClass.toLowerCase());
       });
     
@@ -259,9 +247,9 @@ class SafetyIndexMap {
         .attr("class", "street")
         .attr("d", d3.geoPath().projection(vis.projection))
         .attr("fill", "none")
-        .attr("stroke", "#aaa")  // Light gray for visibility
-        .attr("stroke-width", 0.6)  // Slightly thicker for clarity
-        .attr("opacity", 0.7);  // Visible by default
+        .attr("stroke", "#aaa")  
+        .attr("stroke-width", 0.6)  
+        .attr("opacity", 0.7);  
       });
     }
   
@@ -304,11 +292,11 @@ class SafetyIndexMap {
       // Add the event listener
       safetyCheckButton.addEventListener("click", async () => {
         const loadingDiv = document.getElementById("loading-indicator");
-        loadingDiv.style.display = "block"; // Show "Calculating..." message
+        loadingDiv.style.display = "block"; 
         safetyCheckButton.disabled = true;
         await vis.wrangleData();
         safetyCheckButton.disabled = false;
-        loadingDiv.style.display = "none";  // Hide it once done
+        loadingDiv.style.display = "none";  
       });
     }
   }
@@ -463,11 +451,7 @@ class SafetyIndexMap {
         }
       });
     }
-    
-    // Debugging logs
-    console.log("Crime Count by Year:", yearlyCrimeCounts);
-    console.log(`Total Unique Crimes Near Route: ${uniqueCrimes.size} | Weighted Score: ${weightedScore}`);
-    
+  
     return { crimeCount: uniqueCrimes.size, weightedScore };
   }
   
