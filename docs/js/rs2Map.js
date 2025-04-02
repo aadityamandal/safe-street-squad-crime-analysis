@@ -189,6 +189,8 @@ class RS2Map {
       .append("g")
       .attr("class", "legend-group")
       .attr("transform", `translate(${vis.width - 180}, ${vis.margin.top + 20})`);
+    // Creating the background rectangle behind the legend
+    vis.legendGroup.append("rect").attr("x", 20).attr("y", -30).attr("width", 175).attr("height", 190).attr("fill", "#333").attr("rx", 10).attr("ry", 10);
 
     // Creating the legend for the MCI crime categories
     let rs2Legend = [

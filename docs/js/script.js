@@ -24,7 +24,7 @@ let promises = [
 
   // For the Solution Vis
   d3.json("data/toronto_boundary.geojson"),
-  d3.json("data/toronto_streets.geojson")
+  d3.json("data/toronto_streets.geojson"),
 ];
 
 Promise.all(promises)
@@ -74,7 +74,8 @@ function initHookChart(data) {
 
   console.log(aggregatedData);
 
-  const colorScale = d3.scaleOrdinal()
+  const colorScale = d3
+    .scaleOrdinal()
     .domain(["ASSAULT", "ROBBERY", "THEFTOVER", "AUTOTHEFT", "BREAKENTER"])
     .range(["#1f77b4", "#2ca02c", "#d62728", "#ff7f0e", "#9467bd"]);
 
@@ -126,10 +127,27 @@ function initRisingInsight1Chart(data) {
 function initRisingInsight2Chart(data) {
   // Manually define a set of known urban neighborhoods
   const urbanHoods = new Set([
-    "Downtown", "Yonge-Bay Corridor", "Bay-Cloverhill", "Church-Wellesley", "St Lawrence-East Bayfront-The Islands",
-    "Harbourfront-CityPlace", "Wellington Place", "Fort York-Liberty Village", "West Queen West", "Annex", "University",
-    "Palmerston-Little Italy", "Kensington-Chinatown", "Moss Park", "Regent Park", "North St.James Town",
-    "Cabbagetown-South St.James Town", "Yonge-Eglinton", "Mount Pleasant East", "Rosedale-Moore Park", "Yonge-St.Clair"
+    "Downtown",
+    "Yonge-Bay Corridor",
+    "Bay-Cloverhill",
+    "Church-Wellesley",
+    "St Lawrence-East Bayfront-The Islands",
+    "Harbourfront-CityPlace",
+    "Wellington Place",
+    "Fort York-Liberty Village",
+    "West Queen West",
+    "Annex",
+    "University",
+    "Palmerston-Little Italy",
+    "Kensington-Chinatown",
+    "Moss Park",
+    "Regent Park",
+    "North St.James Town",
+    "Cabbagetown-South St.James Town",
+    "Yonge-Eglinton",
+    "Mount Pleasant East",
+    "Rosedale-Moore Park",
+    "Yonge-St.Clair",
   ]);
 
   let urbanCrimeData = { Assault: 0, Robbery: 0, "Break & Enter": 0, "Auto Theft": 0, Other: 0 };
@@ -157,4 +175,3 @@ function initRisingInsight2Chart(data) {
   new PieChart("urban-pie-chart", urbanCrimeData);
   new PieChart("suburban-pie-chart", suburbanCrimeData);
 }
-
