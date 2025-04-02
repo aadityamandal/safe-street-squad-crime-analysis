@@ -20,5 +20,6 @@ None of the files themselves are libraries; They are directly integrated:
 - Animate on Scroll
 - Bootstrap
 - noUiSlider
+- OpenStreetMap Nominatim API
 - D3
 
